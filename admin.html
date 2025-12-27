@@ -37,6 +37,15 @@ header h1{
   padding:15px;
   margin-bottom:15px;
 }
+.form-card img{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  border:2px solid #00aaff;
+  object-fit:cover;
+  display:block;
+  margin-bottom:8px;
+}
 .form-card h2{
   margin:0 0 10px 0;
   font-size:1.2rem;
@@ -45,14 +54,24 @@ header h1{
 .form-card p{
   margin:5px 0;
 }
-button{
-  padding:10px 15px;
-  margin-top:15px;
+.status-btns{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.status-btn{
+  flex:1;
+  padding:8px;
   border:none;
   border-radius:10px;
-  font-weight:bold;
   cursor:pointer;
+  font-weight:bold;
+  color:white;
 }
+.status-btn.pending{background:gray;}
+.status-btn.accepted{background:green;}
+.status-btn.refused{background:red;}
 button.logout{
   background:red;
   color:white;
@@ -88,7 +107,7 @@ button.back:hover{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 /* 🔥 Config Firebase */
 const firebaseConfig = {
@@ -114,7 +133,8 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   // Vérifier rôle admin
-  const userDoc = await (await getDocs(collection(db,"users"))).docs.find(d=>d.id===user.uid);
+  const userDocSnap = await getDocs(collection(db,"users"));
+  const userDoc = userDocSnap.docs.find(d=>d.id===user.uid);
   if(!userDoc || userDoc.data().role !== "admin"){
     alert("❌ Accès refusé, vous devez être admin !");
     location.href = "profil.html";
@@ -122,7 +142,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   // Récupérer tous les formulaires
-  const formsSnap = await getDocs(query(collection(db,"forms"), orderBy("createdAt","desc")));
+  const formsSnap = await getDocs(query(collection(db,"forms"), orderBy("timestamp","desc")));
   if(formsSnap.empty){
     container.innerHTML = "<p>Aucun formulaire soumis pour le moment.</p>";
     return;
@@ -134,23 +154,44 @@ onAuthStateChanged(auth, async (user) => {
     card.className = "form-card";
 
     card.innerHTML = `
+      <img src="${data.profilePhoto || 'https://via.placeholder.com/60'}" alt="Photo profil">
       <h2>Formulaire ID: ${docSnap.id}</h2>
-      <p><strong>Compte:</strong> ${data.currentAccount || "-"}</p>
-      <p><strong>Nom complet:</strong> ${data.fullname || "-"}</p>
+      <p><strong>Compte:</strong> ${data.accountName || "-"}</p>
+      <p><strong>Nom complet:</strong> ${data.fullName || "-"}</p>
       <p><strong>Email:</strong> ${data.email || "-"}</p>
       <p><strong>Genre:</strong> ${data.gender || "-"}</p>
       <p><strong>Téléphone:</strong> ${data.phone || "-"}</p>
-      <p><strong>Région:</strong> ${data.playerRegion || "-"}</p>
-      <p><strong>Niveau:</strong> ${data.playerLevel || "-"}</p>
+      <p><strong>Région:</strong> ${data.region || "-"}</p>
+      <p><strong>Niveau:</strong> ${data.level || "-"}</p>
       <p><strong>Créateur:</strong> ${data.isCreator ? "Oui" : "Non"}</p>
       <p><strong>Réseau:</strong> ${data.creatorNetwork || "-"}</p>
       <p><strong>Lien:</strong> ${data.creatorLink || "-"}</p>
       <p><strong>Message:</strong> ${data.message || "-"}</p>
-      <p><strong>Soumis le:</strong> ${data.createdAt?.toDate?.()?.toLocaleString() || "-"}</p>
+      <p><strong>Soumis le:</strong> ${data.timestamp?.toDate?.()?.toLocaleString() || "-"}</p>
+      <div class="status-btns">
+        <button class="status-btn pending" onclick="updateStatus('${docSnap.id}','pending',this)">En attente</button>
+        <button class="status-btn accepted" onclick="updateStatus('${docSnap.id}','accepted',this)">Accepté</button>
+        <button class="status-btn refused" onclick="updateStatus('${docSnap.id}','refused',this)">Refusé</button>
+      </div>
+      <p><strong>Statut actuel:</strong> <span class="status-text">${data.status || 'pending'}</span></p>
     `;
     container.appendChild(card);
   });
 });
+
+/* Mettre à jour le statut */
+async function updateStatus(formId, status, btn){
+  try{
+    const formRef = doc(db,"forms",formId);
+    await updateDoc(formRef, { status });
+    const statusText = btn.closest(".form-card").querySelector(".status-text");
+    statusText.textContent = status;
+    alert(`✅ Statut mis à jour : ${status}`);
+  }catch(err){
+    console.error(err);
+    alert("❌ Impossible de mettre à jour le statut !");
+  }
+}
 
 /* Déconnexion */
 document.getElementById("logoutBtn").onclick = async () => {
