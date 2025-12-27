@@ -12,8 +12,6 @@ body{
   background:linear-gradient(135deg,#000,#2c2c2c);
   color:#fff;
 }
-
-/* ===== HEADER ===== */
 header{
   background:rgba(0,0,0,0.65);
   padding:16px 20px;
@@ -30,8 +28,6 @@ header h1{
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-
-/* ===== CONTAINER ===== */
 .container{
   max-width:440px;
   margin:30px auto;
@@ -41,8 +37,6 @@ header h1{
   padding:22px;
   text-align:center;
 }
-
-/* ===== SECTIONS ===== */
 .form-section{
   margin-bottom:20px;
 }
@@ -53,8 +47,6 @@ header h1{
   padding-left:10px;
   border-left:3px solid #00aaff;
 }
-
-/* ===== INPUTS ===== */
 label{
   font-size:0.85rem;
   color:#ccc;
@@ -71,8 +63,6 @@ input, select, textarea{
   outline:none;
   box-sizing:border-box;
 }
-
-/* ===== PHOTO ===== */
 #profilePhoto{
   width:100px;
   height:100px;
@@ -81,8 +71,6 @@ input, select, textarea{
   object-fit:cover;
   margin:10px auto;
 }
-
-/* ===== GENRE ===== */
 .gender-box{
   display:flex;
   gap:10px;
@@ -103,16 +91,12 @@ input, select, textarea{
   color:black;
   box-shadow:0 0 8px #00aaffaa;
 }
-
-/* ===== PHONE ===== */
 .phone-box{
   display:flex;
   gap:10px;
 }
 .phone-box select{ width:35%; }
 .phone-box input{ width:65%; }
-
-/* ===== CHECKBOX ===== */
 .status{
   display:flex;
   align-items:center;
@@ -127,8 +111,6 @@ input, select, textarea{
 .status.compact{
   justify-content:flex-start;
 }
-
-/* ===== CRÉATEUR ===== */
 .creator-section{
   margin-top:10px;
 }
@@ -145,8 +127,6 @@ input, select, textarea{
   color:white;
   margin-bottom:10px;
 }
-
-/* ===== RÉSEAU SOCIAL AVEC ICÔNES ===== */
 .network-btns{
   display:flex;
   flex-wrap:wrap;
@@ -174,8 +154,6 @@ input, select, textarea{
 .network-btn img{
   display:block;
 }
-
-/* ===== BUTTON ===== */
 button{
   width:100%;
   padding:12px;
@@ -191,8 +169,6 @@ button:hover{
   background:#00aaff;
   color:black;
 }
-
-/* ===== BOUTON PROFIL ===== */
 #profilBtn{
   width:100%;
   padding:12px;
@@ -208,8 +184,6 @@ button:hover{
 #profilBtn:hover{
   background:#1e7e34;
 }
-
-/* ===== FOOTER ===== */
 footer{
   text-align:center;
   margin:25px 0;
@@ -220,18 +194,14 @@ footer{
 </head>
 
 <body>
-
 <header>
   <h1>Ａｐｐｓ⁵⁰９</h1>
 </header>
 
 <div class="container">
 <form id="apps509Form">
-
-<!-- ===== PHOTO UTILISATEUR ===== -->
 <img id="profilePhoto" src="https://via.placeholder.com/100" alt="Photo de profil">
 
-<!-- ===== COMPTE ===== -->
 <div class="form-section">
   <div class="form-title">Compte</div>
   <label>Nom du compte actuel</label>
@@ -242,7 +212,6 @@ footer{
   </div>
 </div>
 
-<!-- ===== IDENTITÉ ===== -->
 <div class="form-section">
   <div class="form-title">Identité</div>
   <label>Nom complet</label>
@@ -255,7 +224,6 @@ footer{
   <input type="hidden" id="gender" value="♂">
 </div>
 
-<!-- ===== CONTACT ===== -->
 <div class="form-section">
   <div class="form-title">Contact</div>
   <label>Email</label>
@@ -272,7 +240,6 @@ footer{
   </div>
 </div>
 
-<!-- ===== JEU ===== -->
 <div class="form-section">
   <div class="form-title">Jeu</div>
   <label>UID du joueur</label>
@@ -294,7 +261,6 @@ footer{
   </select>
 </div>
 
-<!-- ===== CRÉATEUR ===== -->
 <div class="form-section creator-section">
   <div class="form-title">Créateur de contenu</div>
   <div class="status">
@@ -326,7 +292,6 @@ footer{
   </div>
 </div>
 
-<!-- ===== MESSAGE ===== -->
 <div class="form-section">
   <div class="form-title">Message</div>
   <textarea rows="4" placeholder="Informations supplémentaires"></textarea>
@@ -340,12 +305,11 @@ footer{
 
 <footer>© 2025 — Ａｐｐｓ⁵⁰９</footer>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<script>
-// Config Firebase
 const firebaseConfig = {
   apiKey: "VOTRE_API_KEY",
   authDomain: "VOTRE_PROJECT.firebaseapp.com",
@@ -354,45 +318,37 @@ const firebaseConfig = {
   messagingSenderId: "VOTRE_SENDER_ID",
   appId: "VOTRE_APP_ID"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const auth = firebase.auth();
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 let currentUser = null;
 
-// Vérifie connexion utilisateur et préremplit le formulaire
-auth.onAuthStateChanged(async user => {
+onAuthStateChanged(auth, async user => {
   if(!user){
     alert("❌ Veuillez vous connecter pour remplir le formulaire.");
     window.location.href = "profil.html";
     return;
   }
-
   currentUser = user;
-
-  // Remplir photo
   document.getElementById("profilePhoto").src = user.photoURL || "https://via.placeholder.com/100";
 
-  // Charger données depuis Firestore
-  const docRef = db.collection("users").doc(user.uid);
-  const docSnap = await docRef.get();
-  if(docSnap.exists){
-    const data = docSnap.data();
+  const docRef = doc(db, "users", user.uid);
+  const docSnap = await getDoc(docRef);
 
-    // Pré-remplir formulaire
+  if(docSnap.exists()){
+    const data = docSnap.data();
     document.getElementById("currentAccount").value = data.username || data.fullname || "";
     document.querySelector('input[type="text"]:not(#currentAccount)').value = data.fullname || "";
     document.querySelector('input[type="email"]').value = data.email || "";
     document.getElementById("isCreator").checked = data.isCreator || false;
     toggleCreator();
 
-    // Réseau social créateur
     if(data.creatorNetwork){
       const networkBtn = document.querySelector(`.network-btn[data-network="${data.creatorNetwork}"]`);
       if(networkBtn) setNetwork(networkBtn);
     }
-
-    // Genre
     if(data.gender){
       const genderBtn = document.querySelector(`.gender-btn[data-gender="${data.gender}"]`);
       if(genderBtn) setGender(genderBtn);
@@ -400,27 +356,23 @@ auth.onAuthStateChanged(async user => {
   }
 });
 
-// Genre
 function setGender(el){
   document.querySelectorAll(".gender-btn").forEach(b => b.classList.remove("active"));
   el.classList.add("active");
   document.getElementById("gender").value = el.getAttribute("data-gender");
 }
 
-// Afficher / cacher créateur
 function toggleCreator(){
   document.getElementById("creatorLinkBox").style.display =
     document.getElementById("isCreator").checked ? "block" : "none";
 }
 
-// Réseau social
 function setNetwork(el){
   document.querySelectorAll(".network-btn").forEach(b=>b.classList.remove("active"));
   el.classList.add("active");
   document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
 }
 
-// Soumission du formulaire
 document.getElementById("apps509Form").addEventListener("submit", async e=>{
   e.preventDefault();
   const form = e.target;
@@ -431,16 +383,16 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
     email: form.querySelector('input[type="email"]').value,
     phone: form.querySelector('.phone-box input').value,
     region: document.getElementById("playerRegion").value,
-    level: document.getElementById("playerLevel").value,
+    level: form.playerLevel.value,
     isCreator: document.getElementById("isCreator").checked,
     creatorNetwork: document.getElementById("creatorNetworkValue").value,
     creatorLink: form.querySelector('#creatorLinkBox input[type="url"]').value,
     message: form.querySelector('textarea').value,
     profilePhoto: document.getElementById("profilePhoto").src,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    timestamp: serverTimestamp()
   };
   try{
-    await db.collection("forms").add(data);
+    await addDoc(collection(db, "forms"), data);
     alert("✅ Formulaire envoyé automatiquement dans Firestore !");
     form.reset();
     toggleCreator();
@@ -450,12 +402,10 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
   }
 });
 
-// Retour profil
 function goToProfil(){
   window.location.href = "profil.html";
 }
 
-// Affiche créateur au chargement si coché
 document.addEventListener("DOMContentLoaded", ()=>{ toggleCreator(); });
 </script>
 
