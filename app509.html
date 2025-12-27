@@ -225,10 +225,8 @@ footer{
 <!-- ===== COMPTE ===== -->
 <div class="form-section">
   <div class="form-title">Compte</div>
-
   <label>Nom du compte actuel</label>
   <input type="text" id="currentAccount">
-
   <div class="status compact">
     <input type="checkbox" checked id="accountActive">
     <label for="accountActive">Compte actif</label>
@@ -238,10 +236,8 @@ footer{
 <!-- ===== IDENTITÉ ===== -->
 <div class="form-section">
   <div class="form-title">Identité</div>
-
   <label>Nom complet</label>
   <input type="text" required placeholder="Nom et prénom">
-
   <label>Genre</label>
   <div class="gender-box">
     <div class="gender-btn active" data-gender="♂" onclick="setGender(this)">♂</div>
@@ -253,10 +249,8 @@ footer{
 <!-- ===== CONTACT ===== -->
 <div class="form-section">
   <div class="form-title">Contact</div>
-
   <label>Email</label>
   <input type="email" required placeholder="email@example.com">
-
   <label>Téléphone</label>
   <div class="phone-box">
     <select>
@@ -272,10 +266,8 @@ footer{
 <!-- ===== JEU ===== -->
 <div class="form-section">
   <div class="form-title">Jeu</div>
-
   <label>UID du joueur</label>
   <input type="text" placeholder="UID / ID du joueur">
-
   <label>Région</label>
   <select id="playerRegion">
     <option value="amerique-nord">Amérique du Nord</option>
@@ -283,7 +275,6 @@ footer{
     <option value="europe">Europe</option>
     <option value="mena">MENA</option>
   </select>
-
   <label>Niveau du compte</label>
   <select id="playerLevel">
     <script>
@@ -297,12 +288,10 @@ footer{
 <!-- ===== CRÉATEUR ===== -->
 <div class="form-section creator-section">
   <div class="form-title">Créateur de contenu</div>
-
   <div class="status">
     <input type="checkbox" id="isCreator" onchange="toggleCreator()">
     <label for="isCreator">Activer</label>
   </div>
-
   <div id="creatorLinkBox">
     <label>Réseau social</label>
     <div class="network-btns">
@@ -323,9 +312,8 @@ footer{
       </div>
     </div>
     <input type="hidden" id="creatorNetworkValue" value="tiktok">
-
     <label>Lien du profil</label>
-    <input type="url" id="creatorLink" placeholder="https://">
+    <input type="url" placeholder="https://">
   </div>
 </div>
 
@@ -345,84 +333,83 @@ footer{
 
 <footer>© 2025 — Ａｐｐｓ⁵⁰９</footer>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, doc, getDocs, query, where, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
+<script>
+// Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
-  authDomain: "app509cloud.firebaseapp.com",
-  projectId: "app509cloud",
-  storageBucket: "app509cloud.firebasestorage.app",
-  messagingSenderId: "445508086674",
-  appId: "1:445508086674:web:22d593d940bd328d436f4b"
+  apiKey: "VOTRE_API_KEY",
+  authDomain: "VOTRE_PROJECT.firebaseapp.com",
+  projectId: "VOTRE_PROJECT",
+  storageBucket: "VOTRE_PROJECT.appspot.com",
+  messagingSenderId: "VOTRE_SENDER_ID",
+  appId: "VOTRE_APP_ID"
 };
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-let currentUser = null;
-
-// ===== Vérifie connexion utilisateur =====
-onAuthStateChanged(auth, async (user)=>{
+// Vérifie connexion utilisateur
+auth.onAuthStateChanged(async user => {
   if(!user){
-    window.location.href = "index.html";
+    alert("❌ Veuillez vous connecter pour remplir le formulaire.");
+    window.location.href = "connexion.html";
     return;
   }
-  currentUser = user;
-  document.getElementById("currentAccount").value = user.displayName || "";
-  document.querySelector('input[type="email"]').value = user.email || "";
 
-  // ===== Pré-remplir formulaire si existant =====
-  const q = query(collection(db,"forms"), where("uid","==",user.uid));
-  const snap = await getDocs(q);
-  if(!snap.empty){
-    const data = snap.docs[0].data();
-    document.querySelector('input[type="text"]:not(#currentAccount)').value = data.fullName || "";
-    document.getElementById("gender").value = data.gender || "♂";
-    setGender(document.querySelector(`.gender-btn[data-gender="${data.gender || '♂'}"]`));
-    document.querySelector('input[type="tel"]').value = data.phone || "";
-    document.getElementById("playerRegion").value = data.region || "amerique-nord";
-    document.getElementById("playerLevel").value = data.level || 1;
+  // Charger données utilisateur pour préremplir le formulaire si besoin
+  const docRef = db.collection("users").doc(user.uid);
+  const docSnap = await docRef.get();
+  if(docSnap.exists){
+    const data = docSnap.data();
+    document.getElementById("currentAccount").value = data.username || "";
     document.getElementById("isCreator").checked = data.isCreator || false;
-    toggleCreator();
-    document.getElementById("creatorNetworkValue").value = data.creatorNetwork || "tiktok";
-    setNetwork(document.querySelector(`.network-btn[data-network="${data.creatorNetwork || 'tiktok'}"]`));
-    document.getElementById("creatorLink").value = data.creatorLink || "";
-    document.querySelector('textarea').value = data.message || "";
+    toggleCreator(); // force affichage réseau
+    if(data.creatorNetwork){
+      setNetwork(document.querySelector(`.network-btn[data-network="${data.creatorNetwork}"]`));
+    }
+    const fullnameInput = document.querySelector('input[type="text"]:not(#currentAccount)');
+    if(fullnameInput) fullnameInput.value = data.fullName || "";
   }
 });
 
+/* Nom du compte auto (modifiable) */
+let currentUserData = JSON.parse(sessionStorage.getItem("dpstore_user") || "{}");
+if(currentUserData.username){
+  document.getElementById("currentAccount").value = currentUserData.username;
+}
+
+/* Genre */
 function setGender(el){
   document.querySelectorAll(".gender-btn").forEach(b => b.classList.remove("active"));
-  if(el) el.classList.add("active");
-  document.getElementById("gender").value = el?.getAttribute("data-gender") || "♂";
+  el.classList.add("active");
+  document.getElementById("gender").value = el.getAttribute("data-gender");
 }
 
+/* Créateur */
 function toggleCreator(){
+  const creatorCheckbox = document.getElementById("isCreator");
   document.getElementById("creatorLinkBox").style.display =
-    document.getElementById("isCreator").checked ? "block" : "none";
+    creatorCheckbox.checked ? "block" : "none";
 }
+
+/* Affiche le bon état au chargement */
 document.addEventListener("DOMContentLoaded", ()=>{ toggleCreator(); });
 
+/* Réseau social avec icône */
 function setNetwork(el){
   document.querySelectorAll(".network-btn").forEach(b=>b.classList.remove("active"));
-  if(el) el.classList.add("active");
-  document.getElementById("creatorNetworkValue").value = el?.getAttribute("data-network") || "tiktok";
+  el.classList.add("active");
+  document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
 }
 
+/* Submit => envoie automatique Firestore */
 document.getElementById("apps509Form").addEventListener("submit",async e=>{
   e.preventDefault();
-  if(!currentUser){ alert("❌ Vous devez être connecté."); return; }
   const form = e.target;
-
-  // Vérifier si un formulaire existe déjà
-  const q = query(collection(db,"forms"), where("uid","==",currentUser.uid));
-  const snap = await getDocs(q);
   const data = {
-    uid: currentUser.uid,
     accountName: form.currentAccount.value,
     fullName: form.querySelector('input[type="text"]:not(#currentAccount)').value,
     gender: document.getElementById("gender").value,
@@ -432,20 +419,14 @@ document.getElementById("apps509Form").addEventListener("submit",async e=>{
     level: document.getElementById("playerLevel").value,
     isCreator: document.getElementById("isCreator").checked,
     creatorNetwork: document.getElementById("creatorNetworkValue").value,
-    creatorLink: document.getElementById("creatorLink").value,
+    creatorLink: form.querySelector('#creatorLinkBox input[type="url"]').value,
     message: form.querySelector('textarea').value,
-    timestamp: serverTimestamp()
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
   };
-
   try{
-    if(!snap.empty){
-      // Mise à jour du premier formulaire existant
-      await updateDoc(doc(db,"forms",snap.docs[0].id), data);
-      alert("✅ Formulaire mis à jour avec succès !");
-    }else{
-      await addDoc(collection(db,"forms"), data);
-      alert("✅ Formulaire envoyé automatiquement dans Firestore !");
-    }
+    await db.collection("forms").add(data);
+    alert("✅ Formulaire envoyé automatiquement dans Firestore !");
+    form.reset();
     toggleCreator();
   }catch(err){
     console.error(err);
@@ -453,6 +434,7 @@ document.getElementById("apps509Form").addEventListener("submit",async e=>{
   }
 });
 
+/* Bouton retour profil */
 function goToProfil(){
   window.location.href = "profil.html";
 }
