@@ -186,23 +186,6 @@ button:hover{
   color:black;
 }
 
-/* ===== BOUTON PROFIL ===== */
-#profilBtn{
-  width:100%;
-  padding:12px;
-  margin-top:12px;
-  border:none;
-  border-radius:12px;
-  background:#28a745;
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-  text-align:center;
-}
-#profilBtn:hover{
-  background:#1e7e34;
-}
-
 /* ===== FOOTER ===== */
 footer{
   text-align:center;
@@ -332,11 +315,12 @@ footer{
 <!-- ===== MESSAGE ===== -->
 <div class="form-section">
   <div class="form-title">Message</div>
+
   <textarea rows="4" placeholder="Informations supplémentaires"></textarea>
 </div>
 
 <button type="submit">Envoyer</button>
-<button type="button" id="profilBtn" onclick="goToProfil()">Retour vers Profil</button>
+<button type="button" onclick="goToProfil()" style="background:#00aaff; color:black; margin-top:10px;">⬅️ Retour vers Profil</button>
 
 </form>
 </div>
@@ -366,11 +350,12 @@ let currentUser = null;
 // ===== Vérification connexion utilisateur =====
 onAuthStateChanged(auth, (user)=>{
   if(!user){
-    alert("❌ Vous devez être connecté pour accéder au formulaire");
-    window.location.href = "profil.html";
+    window.location.href = "index.html"; // pas connecté → redirection
     return;
   }
   currentUser = user;
+
+  // pré-remplir formulaire
   document.getElementById("currentAccount").value = user.displayName || "";
   document.querySelector('input[type="email"]').value = user.email || "";
 });
