@@ -89,6 +89,27 @@ button{
   color:white;
 }
 .goApp:hover{ background:#3399ff; }
+.deleteBtn{
+  background:#dc3545;
+  color:white;
+}
+.deleteBtn:hover{ background:#ff5555; }
+.whatsapp-link{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  text-decoration:none;
+  color:#25D366;
+  font-weight:bold;
+  font-size:1rem;
+  border:1px solid #25D366;
+  padding:8px 12px;
+  border-radius:12px;
+  transition:0.2s;
+}
+.whatsapp-link img{
+  display:block;
+}
 </style>
 </head>
 
@@ -112,6 +133,14 @@ button{
   <button class="back" onclick="location.href='profil.html'">⬅️ Retour Profil</button>
   <button class="goApp" onclick="location.href='app509.html'">🌐 Aller à App509</button>
   <button class="logout" id="logoutBtn">Déconnexion</button>
+</div>
+
+<!-- Bloc WhatsApp -->
+<div class="container" style="text-align:center; margin-top:20px;">
+  <a href="https://whatsapp.com/channel/0029Vb5PS7t4inoryNPX3j3g" target="_blank" class="whatsapp-link">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="24" height="24">
+    Follow the Savage divah channel on WhatsApp
+  </a>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -180,8 +209,19 @@ auth.onAuthStateChanged(user => {
             Statut : ${d.status || "En attente"}
           </p>
           <p><strong>Soumis le:</strong> ${d.createdAt?.toDate?.()?.toLocaleString() || "-"}</p>
+          <button class="deleteBtn" data-id="${doc.id}">Supprimer</button>
         `;
         container.appendChild(card);
+      });
+
+      // Boutons supprimer
+      container.querySelectorAll(".deleteBtn").forEach(btn=>{
+        btn.onclick = async ()=>{
+          if(confirm("❌ Voulez-vous vraiment supprimer cette demande ?")){
+            await db.collection("forms").doc(btn.dataset.id).delete();
+            alert("✅ Demande supprimée !");
+          }
+        };
       });
     }, err=>{
       console.error("Erreur Firestore:", err);
