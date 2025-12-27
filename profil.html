@@ -29,11 +29,11 @@ header h1{
   max-width:900px;
   margin:20px auto;
   padding:15px;
+  display:none; /* caché par défaut jusqu'à ce que notice soit acceptée */
 }
 .profile-box{
   text-align:center;
   margin-bottom:25px;
-  display:none; /* Profil caché tant que notice non acceptée */
 }
 .profile-box img{
   width:90px;
@@ -91,9 +91,9 @@ button{
 }
 .goApp:hover{ background:#3399ff; }
 
-/* Style modal notice */
+/* Modal notice */
 #noticeModal{
-  display:flex;
+  display:none;
   position:fixed;
   top:0;
   left:0;
@@ -104,7 +104,7 @@ button{
   align-items:center;
   z-index:1000;
 }
-#noticeModal .modal-content{
+#noticeContent{
   background:#fff;
   color:#000;
   padding:20px;
@@ -114,23 +114,23 @@ button{
   overflow-y:auto;
   text-align:left;
 }
-#noticeModal h3{
+#noticeContent h3{
   text-align:center;
   margin-bottom:15px;
 }
-#noticeModal button{
+#noticeContent p{
+  margin-bottom:10px;
+}
+#acceptBtn{
   display:block;
   margin:15px auto 0 auto;
-  padding:12px 25px;
+  padding:10px 20px;
+  border:none;
+  border-radius:8px;
   background:#00aa00;
   color:white;
   font-weight:bold;
-  border:none;
-  border-radius:8px;
   cursor:pointer;
-}
-#noticeModal button:hover{
-  background:#33cc33;
 }
 </style>
 </head>
@@ -141,9 +141,9 @@ button{
   <h1>Mes demandes — Ａｐｐｓ⁵⁰９</h1>
 </header>
 
-<!-- Notice Modal -->
+<!-- Modal notice -->
 <div id="noticeModal">
-  <div class="modal-content">
+  <div id="noticeContent">
     <h3>Clan ‘’Ａｐｐｓ⁵⁰９ ‘’ N/A</h3>
     <p><strong>Update règles</strong></p>
     <p>C R E O L E   H A I T I A N 🇭🇹</p>
@@ -157,11 +157,11 @@ button{
     <p><strong>Règ 8:</strong> Pa pataje kontni oswa anyen ki pa pou Free Fire.</p>
     <p><strong>Règ 9:</strong> Ou pa dwe use hack ni jwe ak Hacker. Pa mande dyaman isit la. Si yon moun mande m, map metew deyo nan.</p>
     <p><strong>Règ 10:</strong> Kvk, Or pvp, Vs lot Clan Vendredi, Samedi, Dimanche avant gè clan an. Fow gen gomme pou w change nomw sinon ou pap ka antre.</p>
-    <button id="acceptNoticeBtn">Accepte et Continue (Savage Divah)</button>
+    <button id="acceptBtn">Accepte et Continue (Savage Divah)</button>
   </div>
 </div>
 
-<div class="container profile-box" id="profileBox">
+<div class="container profile-box" id="profileContainer">
   <img id="userPhoto" src="">
   <h3 id="userName">—</h3>
   <p id="userEmail">—</p>
@@ -194,10 +194,10 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
+const profileContainer = document.getElementById("profileContainer");
 const container = document.getElementById("requestsContainer");
-const profileBox = document.getElementById("profileBox");
 const noticeModal = document.getElementById("noticeModal");
-const acceptNoticeBtn = document.getElementById("acceptNoticeBtn");
+const acceptBtn = document.getElementById("acceptBtn");
 
 auth.onAuthStateChanged(user => {
   if(!user){
@@ -206,17 +206,22 @@ auth.onAuthStateChanged(user => {
     return;
   }
 
-  // ⚡ Attendre que l'utilisateur accepte la notice avant d'afficher le profil
-  acceptNoticeBtn.onclick = () => {
-    noticeModal.style.display = 'none';
-    profileBox.style.display = 'block';
+  // Affichage profil mais caché tant que notice non accepté
+  document.getElementById("userPhoto").src = user.photoURL || "https://via.placeholder.com/90";
+  document.getElementById("userEmail").textContent = user.email;
+  document.getElementById("userName").textContent = user.displayName || "Utilisateur";
 
-    // Affichage profil
-    document.getElementById("userPhoto").src = user.photoURL || "https://via.placeholder.com/90";
-    document.getElementById("userEmail").textContent = user.email;
-    document.getElementById("userName").textContent = user.displayName || "Utilisateur";
+  // ⚡ Afficher le modal notice seulement si jamais affiché pour cette session
+  if(!sessionStorage.getItem('noticeAccepted')){
+    noticeModal.style.display = 'flex';
+  } else {
+    // Si déjà accepté avant, afficher direct le profil
+    profileContainer.style.display = 'block';
+    container.style.display = 'block';
+  }
 
-    // Charger les demandes
+  // Charger les demandes après validation de notice ou directement si déjà accepté
+  const loadRequests = () => {
     db.collection("forms")
       .where("userId","==",user.uid)
       .orderBy("createdAt","desc")
@@ -259,11 +264,26 @@ auth.onAuthStateChanged(user => {
         container.innerHTML = "<p>Erreur lors du chargement des demandes.</p>";
       });
   };
+
+  // Bouton accepter le notice
+  acceptBtn.addEventListener('click', ()=>{
+    sessionStorage.setItem('noticeAccepted','true');
+    noticeModal.style.display = 'none';
+    profileContainer.style.display = 'block';
+    container.style.display = 'block';
+    loadRequests();
+  });
+
+  // Si déjà accepté avant reload
+  if(sessionStorage.getItem('noticeAccepted')){
+    loadRequests();
+  }
 });
 
 // Déconnexion
 document.getElementById("logoutBtn").onclick = async ()=>{
   await auth.signOut();
+  sessionStorage.removeItem('noticeAccepted'); // réinitialiser modal à la prochaine connexion
   window.location.href = "index.html";
 };
 </script>
