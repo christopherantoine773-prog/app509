@@ -113,8 +113,6 @@ input, select, textarea{
   font-size:0.85rem;
   color:#ccc;
 }
-
-/* Alignement spécifique pour Compte actif */
 .status.compact{
   display:flex;
   align-items:center;
@@ -169,7 +167,7 @@ input, select, textarea{
   display:block;
 }
 
-/* ===== BUTTON ===== */
+/* ===== BUTTONS ===== */
 button{
   width:100%;
   padding:12px;
@@ -333,12 +331,10 @@ footer{
 <!-- ===== MESSAGE ===== -->
 <div class="form-section">
   <div class="form-title">Message</div>
-
   <textarea rows="4" id="messageInput" placeholder="Informations supplémentaires"></textarea>
 </div>
 
 <button type="submit">Envoyer</button>
-<!-- BOUTON RETOUR PROFIL -->
 <button id="backProfile" type="button" onclick="location.href='profil.html'">Retour vers Profil</button>
 
 </form>
@@ -351,7 +347,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* Firebase config */
 const firebaseConfig = {
   apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
   authDomain: "app509cloud.firebaseapp.com",
@@ -365,15 +360,12 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* Vérifier connexion */
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, (user)=>{
   if(!user){
     location.href = "index.html";
   } else {
-    // Préremplir
     document.getElementById("fullnameInput").value = user.displayName || "";
     document.getElementById("emailInput").value = user.email || "";
-
     sessionStorage.setItem("dpstore_user", JSON.stringify({
       fullname: user.displayName || "",
       email: user.email,
@@ -382,33 +374,28 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-/* Nom du compte auto */
 let currentUser = JSON.parse(sessionStorage.getItem("dpstore_user") || "{}");
 if(currentUser.username){
   document.getElementById("currentAccount").value = currentUser.username;
 }
 
-/* Genre */
 function setGender(el){
-  document.querySelectorAll(".gender-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".gender-btn").forEach(b=>b.classList.remove("active"));
   el.classList.add("active");
   document.getElementById("gender").value = el.getAttribute("data-gender");
 }
 
-/* Créateur */
 function toggleCreator(){
   document.getElementById("creatorLinkBox").style.display =
     document.getElementById("isCreator").checked ? "block" : "none";
 }
 
-/* Réseau social avec icône */
 function setNetwork(el){
   document.querySelectorAll(".network-btn").forEach(b=>b.classList.remove("active"));
   el.classList.add("active");
   document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
 }
 
-/* Soumettre formulaire dans Firestore */
 document.getElementById("apps509Form").addEventListener("submit", async e=>{
   e.preventDefault();
 
@@ -432,9 +419,9 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
     await addDoc(collection(db,"forms"), formData);
     alert("✅ Formulaire envoyé avec succès !");
     e.target.reset();
-    toggleCreator(); // cacher les champs créateur si nécessaire
+    toggleCreator();
   } catch(err){
-    alert("❌ Erreur lors de l'envoi : " + err.message);
+    alert("❌ Erreur lors de l'envoi : "+err.message);
   }
 });
 </script>
