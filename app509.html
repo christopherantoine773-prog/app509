@@ -19,7 +19,6 @@ header{
   display:flex;
   justify-content:center;
   align-items:center;
-  position: relative;
 }
 header h1{
   margin:0;
@@ -29,25 +28,9 @@ header h1{
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-/* Barre du haut pour "Voir la demande" */
-.top-bar{
-  position: absolute;
-  top:0;
-  right:0;
-  background:rgba(0,0,0,0.5);
-  padding:4px 8px;
-  font-size:0.75rem;
-  border-bottom-left-radius:8px;
-  cursor:pointer;
-  transition:0.2s;
-}
-.top-bar:hover{
-  background:#00aaff;
-  color:black;
-}
 .container{
   max-width:440px;
-  margin:50px auto 30px auto;
+  margin:30px auto;
   background:rgba(255,255,255,0.07);
   border:1px solid rgba(255,255,255,0.15);
   border-radius:18px;
@@ -201,6 +184,14 @@ button:hover{
 #profilBtn:hover{
   background:#1e7e34;
 }
+.seeRequestsBar{
+  margin-top:10px;
+  padding:6px;
+  font-size:0.8rem;
+  color:#00aaff;
+  cursor:pointer;
+  text-decoration:underline;
+}
 footer{
   text-align:center;
   margin:25px 0;
@@ -213,7 +204,6 @@ footer{
 <body>
 <header>
   <h1>Ａｐｐｓ⁵⁰９</h1>
-  <div class="top-bar" onclick="location.href='svg.html'">Voir la demande</div>
 </header>
 
 <div class="container">
@@ -318,6 +308,10 @@ footer{
 <button type="submit">Envoyer</button>
 <button type="button" id="profilBtn">Retour vers Profil</button>
 
+<div class="seeRequestsBar" onclick="window.location.href='svg.html'">
+  👀 Voir les demandes
+</div>
+
 </form>
 </div>
 
@@ -343,7 +337,7 @@ const db = getFirestore(app);
 
 let currentUser = null;
 
-// Vérification connexion comme profil.html
+// Vérifier connexion
 onAuthStateChanged(auth, async user => {
   if(!user){
     window.location.href = "index.html";
@@ -373,21 +367,23 @@ onAuthStateChanged(auth, async user => {
   }
 });
 
-// Fonctions formulaire
 function setGender(el){
   document.querySelectorAll(".gender-btn").forEach(b => b.classList.remove("active"));
   el.classList.add("active");
   document.getElementById("gender").value = el.getAttribute("data-gender");
 }
+
 function toggleCreator(){
   document.getElementById("creatorLinkBox").style.display =
     document.getElementById("isCreator").checked ? "block" : "none";
 }
+
 function setNetwork(el){
   document.querySelectorAll(".network-btn").forEach(b=>b.classList.remove("active"));
   el.classList.add("active");
   document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
 }
+
 document.getElementById("apps509Form").addEventListener("submit", async e=>{
   e.preventDefault();
   if(!currentUser) return;
@@ -409,20 +405,4 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
   };
   try{
     await addDoc(collection(db, "forms"), data);
-    alert("✅ Formulaire envoyé automatiquement dans Firestore !");
-    form.reset();
-    toggleCreator();
-  }catch(err){
-    console.error(err);
-    alert("❌ Erreur lors de l'envoi !");
-  }
-});
-
-// Bouton retour
-document.getElementById("profilBtn").onclick = () => location.href = "profil.html";
-
-document.addEventListener("DOMContentLoaded", ()=>{ toggleCreator(); });
-</script>
-
-</body>
-</html>
+    alert("✅ Formulaire envoyé automatiquement
