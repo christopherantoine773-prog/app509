@@ -50,13 +50,22 @@ button{
   margin-top:15px;
   border:none;
   border-radius:10px;
-  background:red;
-  color:white;
   font-weight:bold;
   cursor:pointer;
 }
-button:hover{
+button.logout{
+  background:red;
+  color:white;
+}
+button.logout:hover{
   background:#ff6600;
+}
+button.back{
+  background:#00aa00;
+  color:white;
+}
+button.back:hover{
+  background:#33cc33;
 }
 </style>
 </head>
@@ -72,7 +81,8 @@ button:hover{
 </div>
 
 <div class="container">
-  <button id="logoutBtn">Déconnexion</button>
+  <button class="back" onclick="location.href='profil.html'">⬅️ Retour vers profil</button>
+  <button class="logout" id="logoutBtn">Déconnexion</button>
 </div>
 
 <script type="module">
