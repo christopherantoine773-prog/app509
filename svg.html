@@ -72,6 +72,7 @@ button{
   border-radius:10px;
   font-weight:bold;
   cursor:pointer;
+  margin:5px;
 }
 .back{
   background:#00aa00;
@@ -83,6 +84,11 @@ button{
   color:white;
 }
 .logout:hover{ background:#ff6600; }
+.goApp{
+  background:#0066ff;
+  color:white;
+}
+.goApp:hover{ background:#3399ff; }
 </style>
 </head>
 
@@ -104,6 +110,7 @@ button{
 
 <div class="container" style="text-align:center;">
   <button class="back" onclick="location.href='profil.html'">⬅️ Retour Profil</button>
+  <button class="goApp" onclick="location.href='app509.html'">🌐 Aller à App509</button>
   <button class="logout" id="logoutBtn">Déconnexion</button>
 </div>
 
@@ -138,11 +145,12 @@ auth.onAuthStateChanged(user => {
   document.getElementById("userEmail").textContent = user.email;
   document.getElementById("userName").textContent = user.displayName || "Utilisateur";
 
-  // Requête Firestore : ses demandes en temps réel
+  // Requête Firestore : uniquement ses demandes
   db.collection("forms")
     .where("userId","==",user.uid)
     .orderBy("createdAt","desc")
-    .onSnapshot(snapshot=>{
+    .get()
+    .then(snapshot=>{
       container.innerHTML = "";
       if(snapshot.empty){
         container.innerHTML = "<p>Aucune demande trouvée.</p>";
@@ -174,7 +182,8 @@ auth.onAuthStateChanged(user => {
         `;
         container.appendChild(card);
       });
-    }, err=>{
+    })
+    .catch(err=>{
       console.error("Erreur Firestore:", err);
       container.innerHTML = "<p>Erreur lors du chargement des demandes.</p>";
     });
