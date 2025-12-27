@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ａｐｐｓ⁵⁰９ | Formulaire</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#000,#2c2c2c);
+  color:#fff;
+}
+
+/* ===== HEADER ===== */
+header{
+  background:rgba(0,0,0,0.65);
+  padding:16px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.12);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+header h1{
+  margin:0;
+  font-size:1.6rem;
+  line-height:1;
+  background:linear-gradient(90deg,#fff,#aaa);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+  max-width:440px;
+  margin:30px auto;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:18px;
+  padding:22px;
+}
+
+/* ===== SECTIONS ===== */
+.form-section{
+  margin-bottom:20px;
+}
+.form-title{
+  font-size:0.9rem;
+  color:#aaa;
+  margin-bottom:10px;
+  padding-left:10px;
+  border-left:3px solid #00aaff;
+}
+
+/* ===== INPUTS ===== */
+label{
+  font-size:0.85rem;
+  color:#ccc;
+  display:block;
+  margin-bottom:4px;
+}
+input, select, textarea{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(0,0,0,0.45);
+  color:white;
+  outline:none;
+  box-sizing:border-box;
+}
+
+/* ===== GENRE ===== */
+.gender-box{
+  display:flex;
+  gap:10px;
+  margin-top:6px;
+}
+.gender-btn{
+  flex:1;
+  padding:10px 0;
+  font-size:1.5rem;
+  text-align:center;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.25);
+  cursor:pointer;
+  transition:0.2s;
+}
+.gender-btn.active{
+  background:#00aaff;
+  color:black;
+  box-shadow:0 0 8px #00aaffaa;
+}
+
+/* ===== PHONE ===== */
+.phone-box{
+  display:flex;
+  gap:10px;
+}
+.phone-box select{ width:35%; }
+.phone-box input{ width:65%; }
+
+/* ===== CHECKBOX ===== */
+.status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:6px;
+}
+.status label{
+  margin:0;
+  font-size:0.85rem;
+  color:#ccc;
+}
+
+/* Alignement spécifique pour Compte actif */
+.status.compact{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+}
+
+/* ===== CRÉATEUR ===== */
+.creator-section{
+  margin-top:10px;
+}
+#creatorLinkBox{
+  display:none;
+  margin-top:10px;
+}
+#creatorLinkBox input, #creatorLinkBox select{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(0,0,0,0.45);
+  color:white;
+  margin-bottom:10px;
+}
+
+/* ===== RÉSEAU SOCIAL AVEC ICÔNES ===== */
+.network-btns{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:6px;
+}
+.network-btn{
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.25);
+  cursor:pointer;
+  font-size:0.85rem;
+  background:rgba(0,0,0,0.45);
+  transition:0.2s;
+}
+.network-btn.active{
+  background:#00aaff;
+  color:black;
+  box-shadow:0 0 6px #00aaffaa;
+}
+.network-btn img{
+  display:block;
+}
+
+/* ===== BUTTON ===== */
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:12px;
+  background:#555;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+button:hover{
+  background:#00aaff;
+  color:black;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  text-align:center;
+  margin:25px 0;
+  font-size:0.85rem;
+  color:#aaa;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Ａｐｐｓ⁵⁰９</h1>
+</header>
+
+<div class="container">
+<form id="apps509Form">
+
+<!-- ===== COMPTE ===== -->
+<div class="form-section">
+  <div class="form-title">Compte</div>
+
+  <label>Nom du compte actuel</label>
+  <input type="text" id="currentAccount">
+
+  <div class="status compact">
+    <input type="checkbox" checked id="accountActive">
+    <label for="accountActive">Compte actif</label>
+  </div>
+</div>
+
+<!-- ===== IDENTITÉ ===== -->
+<div class="form-section">
+  <div class="form-title">Identité</div>
+
+  <label>Nom complet</label>
+  <input type="text" required placeholder="Nom et prénom">
+
+  <label>Genre</label>
+  <div class="gender-box">
+    <div class="gender-btn active" data-gender="♂" onclick="setGender(this)">♂</div>
+    <div class="gender-btn" data-gender="♀" onclick="setGender(this)">♀</div>
+  </div>
+  <input type="hidden" id="gender" value="♂">
+</div>
+
+<!-- ===== CONTACT ===== -->
+<div class="form-section">
+  <div class="form-title">Contact</div>
+
+  <label>Email</label>
+  <input type="email" required placeholder="email@example.com">
+
+  <label>Téléphone</label>
+  <div class="phone-box">
+    <select>
+      <option value="+509">🇭🇹 +509</option>
+      <option value="+1">🇺🇸 +1</option>
+      <option value="+33">🇫🇷 +33</option>
+      <option value="+44">🇬🇧 +44</option>
+    </select>
+    <input type="tel" placeholder="Numéro">
+  </div>
+</div>
+
+<!-- ===== JEU ===== -->
+<div class="form-section">
+  <div class="form-title">Jeu</div>
+
+  <label>UID du joueur</label>
+  <input type="text" placeholder="UID / ID du joueur">
+
+  <label>Région</label>
+  <select id="playerRegion">
+    <option value="amerique-nord">Amérique du Nord</option>
+    <option value="amerique-sud">Amérique du Sud</option>
+    <option value="europe">Europe</option>
+    <option value="mena">MENA</option>
+  </select>
+
+  <label>Niveau du compte</label>
+  <select id="playerLevel">
+    <script>
+      for(let i=1;i<=120;i++){
+        document.write(`<option value="${i}">${i}</option>`);
+      }
+    </script>
+  </select>
+</div>
+
+<!-- ===== CRÉATEUR ===== -->
+<div class="form-section creator-section">
+  <div class="form-title">Créateur de contenu</div>
+
+  <div class="status">
+    <input type="checkbox" id="isCreator" onchange="toggleCreator()">
+    <label for="isCreator">Activer</label>
+  </div>
+
+  <div id="creatorLinkBox">
+    <label>Réseau social</label>
+    <div class="network-btns">
+      <div class="network-btn active" data-network="tiktok" onclick="setNetwork(this)">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" width="20"> TikTok
+      </div>
+      <div class="network-btn" data-network="youtube" onclick="setNetwork(this)">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" width="20"> YouTube
+      </div>
+      <div class="network-btn" data-network="instagram" onclick="setNetwork(this)">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="20"> Instagram
+      </div>
+      <div class="network-btn" data-network="twitch" onclick="setNetwork(this)">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitch.svg" width="20"> Twitch
+      </div>
+      <div class="network-btn" data-network="facebook" onclick="setNetwork(this)">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png" width="20"> Facebook
+      </div>
+    </div>
+    <input type="hidden" id="creatorNetworkValue" value="tiktok">
+
+    <label>Lien du profil</label>
+    <input type="url" placeholder="https://">
+  </div>
+</div>
+
+<!-- ===== MESSAGE ===== -->
+<div class="form-section">
+  <div class="form-title">Message</div>
+
+  <textarea rows="4" placeholder="Informations supplémentaires"></textarea>
+</div>
+
+<button type="submit">Envoyer</button>
+
+</form>
+</div>
+
+<footer>© 2025 — Ａｐｐｓ⁵⁰９</footer>
+
+<script>
+/* Nom du compte auto (modifiable) */
+let currentUser = JSON.parse(sessionStorage.getItem("dpstore_user") || "{}");
+if(currentUser.username){
+  document.getElementById("currentAccount").value = currentUser.username;
+}
+
+/* Genre */
+function setGender(el){
+  document.querySelectorAll(".gender-btn").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  document.getElementById("gender").value = el.getAttribute("data-gender");
+}
+
+/* Créateur */
+function toggleCreator(){
+  document.getElementById("creatorLinkBox").style.display =
+    document.getElementById("isCreator").checked ? "block" : "none";
+}
+
+/* Réseau social avec icône */
+function setNetwork(el){
+  document.querySelectorAll(".network-btn").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+  document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
+}
+
+/* Submit */
+document.getElementById("apps509Form").addEventListener("submit",e=>{
+  e.preventDefault();
+  alert("✅ Formulaire envoyé avec succès !");
+  e.target.reset();
+});
+</script>
+
+</body>
+</html>
