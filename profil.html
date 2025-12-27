@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ａｐｐｓ⁵⁰９ | Profil</title>
+<title>Mes demandes — Ａｐｐｓ⁵⁰９</title>
 
 <style>
 body{
@@ -12,119 +12,173 @@ body{
   background:linear-gradient(135deg,#000,#2c2c2c);
   color:#fff;
 }
-.container{
-  max-width:420px;
-  margin:40px auto;
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.15);
-  border-radius:18px;
-  padding:22px;
+header{
+  background:rgba(0,0,0,0.7);
+  padding:20px;
   text-align:center;
+  border-bottom:1px solid rgba(255,255,255,0.2);
 }
-h2{
-  margin-top:0;
+header h1{
+  margin:0;
+  font-size:1.6rem;
   background:linear-gradient(90deg,#fff,#aaa);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-label{
-  display:block;
-  margin-top:12px;
-  font-size:0.85rem;
-  color:#ccc;
-  text-align:left;
+.container{
+  max-width:900px;
+  margin:20px auto;
+  padding:15px;
 }
-input{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.2);
-  background:rgba(0,0,0,0.5);
-  color:white;
+.profile-box{
+  text-align:center;
+  margin-bottom:25px;
 }
-button{
-  width:100%;
-  padding:12px;
-  margin-top:14px;
-  border:none;
-  border-radius:12px;
-  background:#00aaff;
-  color:black;
-  font-weight:600;
-  cursor:pointer;
+.profile-box img{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  border:3px solid #00aaff;
+  object-fit:cover;
 }
-button:hover{
-  background:#FFD700;
+.profile-box h3{
+  margin:8px 0 0 0;
 }
-.small{
-  font-size:0.8rem;
+.profile-box p{
+  margin:5px 0;
   color:#aaa;
-  margin-top:6px;
 }
-.admin-box{
-  margin-top:20px;
-  padding:14px;
-  border-radius:12px;
-  background:rgba(255,0,0,0.08);
-  border:1px solid rgba(255,0,0,0.3);
+.request-card{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(0,170,255,0.25);
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:15px;
 }
-.role{
-  margin-top:10px;
-  font-weight:bold;
+.request-card h3{
+  margin:0 0 10px 0;
   color:#00aaff;
 }
+.status{
+  font-weight:bold;
+}
+.status.pending{ color:orange; }
+.status.accepted{ color:#00ff88; }
+.status.refused{ color:red; }
+
+button{
+  padding:10px 15px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+  margin:5px;
+}
+.back{
+  background:#00aa00;
+  color:white;
+}
+.back:hover{ background:#33cc33; }
 .logout{
   background:red;
   color:white;
 }
-.profile-pic{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  border:4px solid #00aaff;
-  object-fit:cover;
+.logout:hover{ background:#ff6600; }
+.goApp{
+  background:#0066ff;
+  color:white;
+}
+.goApp:hover{ background:#3399ff; }
+
+/* Modal Notice */
+#noticeModal{
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.85);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+#noticeContent{
+  background:#fff;
+  color:#000;
+  padding:20px;
+  border-radius:12px;
+  max-width:500px;
+  max-height:80vh;
+  overflow-y:auto;
+  text-align:left;
+}
+#noticeContent h3{
+  text-align:center;
   margin-bottom:15px;
+}
+#noticeContent p{
+  margin:8px 0;
+}
+#noticeContent button{
+  display:block;
+  margin:15px auto 0 auto;
+  padding:10px 20px;
+  border:none;
+  border-radius:8px;
+  background:#00aa00;
+  color:white;
+  cursor:pointer;
+  font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h2>Profil utilisateur</h2>
+<header>
+  <h1>Mes demandes — Ａｐｐｓ⁵⁰９</h1>
+</header>
 
-  <img id="profilePic" class="profile-pic" src="https://via.placeholder.com/120" alt="Photo de profil">
-
-  <p><strong>Email :</strong></p>
-  <p id="email">—</p>
-
-  <label>Nom complet</label>
-  <input type="text" id="fullname" placeholder="Votre nom">
-
-  <button id="saveProfile">💾 Enregistrer le profil</button>
-
-  <div class="role">
-    Rôle : <span id="role">user</span>
-  </div>
-
-  <!-- ===== ADMIN CODE ===== -->
-  <div class="admin-box">
-    <label>Code administrateur</label>
-    <input type="text" id="adminCode" placeholder="Code secret admin">
-    <button id="becomeAdmin">🔐 Devenir admin</button>
-    <div class="small">Accès réservé</div>
-    <button id="goAdminPage" style="margin-top:10px; display:none;">➡️ Aller vers Admin</button>
-  </div>
-
-  <button onclick="location.href='app509.html'">➡️ Aller vers Ａｐｐｓ⁵⁰９</button>
-  <button class="logout" id="logout">Déconnexion</button>
+<div class="container profile-box">
+  <img id="userPhoto" src="">
+  <h3 id="userName">—</h3>
+  <p id="userEmail">—</p>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<div class="container" id="requestsContainer">
+  <!-- Les demandes apparaîtront ici -->
+</div>
 
+<div class="container" style="text-align:center;">
+  <button class="back" onclick="location.href='profil.html'">⬅️ Retour Profil</button>
+  <button class="goApp" onclick="location.href='app509.html'">🌐 Aller à App509</button>
+  <button class="logout" id="logoutBtn">Déconnexion</button>
+</div>
+
+<!-- Notice Modal -->
+<div id="noticeModal">
+  <div id="noticeContent">
+    <h3>Clan ‘’Ａｐｐｓ⁵⁰９ ‘’ N/A</h3>
+    <p><strong>Update règles</strong></p>
+    <p>C R E O L E   H A I T I A N 🇭🇹</p>
+    <p><strong>Règ 1:</strong> Respè, Disiplin, Responsablite</p>
+    <p><strong>Règ 2:</strong> Se pou w aktif ✅</p>
+    <p><strong>Règ 3:</strong> Minimòm 5000 pwen pa semèn ni pou fille ni pou gason. Tout moun supoze fe 5000 pwen an pandan 7 jours sinon map metew deyo. Wap jwenn kado selman pou Guerre guild. Moun ki premye an 🥇 1118 💎 supoze fe 200 pwen. Wap selman banm ID ou puis tann mwen voyel baw.</p>
+    <p><strong>Règ 4:</strong> Move konpòtman ap lakòz ou deyo.</p>
+    <p><strong>Règ 5:</strong> Ou dwe fòme yon bon ekip pou w jwe.</p>
+    <p><strong>Règ 6:</strong> Guerre guid chak Mercredi, Samedi, Dimanch 7è pou 11è nan aswe. Tout moun dwe jwe svp. Et pandan guerre guid lan ou pa supoze jwe lot bagay ke li.</p>
+    <p><strong>Règ 7:</strong> Ａｐｐｓ⁵⁰９ guid lan dwe rete nan nivo 700k pwen chak semèn. Epi rete si nou vle metel nan Top Rejyonal la 🫰🏽</p>
+    <p><strong>Règ 8:</strong> Pa pataje kontni oswa anyen ki pa pou Free Fire.</p>
+    <p><strong>Règ 9:</strong> Ou pa dwe use hack ni jwe ak Hacker. Pa mande dyaman isit la. Si yon moun mande m, map metew deyo nan.</p>
+    <p><strong>Règ 10:</strong> Kvk, Or pvp, Vs lot Clan Vendredi, Samedi, Dimanche avant gè clan an. Fow gen gomme pou w change nomw sinon ou pap ka antre.</p>
+    <button id="acceptNoticeBtn">Accepte et Continue (Savage Divah)</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
   authDomain: "app509cloud.firebaseapp.com",
@@ -133,87 +187,81 @@ const firebaseConfig = {
   messagingSenderId: "445508086674",
   appId: "1:445508086674:web:22d593d940bd328d436f4b"
 };
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const container = document.getElementById("requestsContainer");
 
-const emailEl = document.getElementById("email");
-const fullnameEl = document.getElementById("fullname");
-const roleEl = document.getElementById("role");
-const profilePicEl = document.getElementById("profilePic");
-const goAdminBtn = document.getElementById("goAdminPage");
-
-let currentUser = null;
-
-// ===== Vérifier connexion Google =====
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    location.href = "index.html";
+// Affichage profil et demandes
+auth.onAuthStateChanged(user => {
+  if(!user){
+    alert("❌ Veuillez vous connecter.");
+    window.location.href = "index.html";
     return;
   }
 
-  currentUser = user;
-  emailEl.textContent = user.email;
-  profilePicEl.src = user.photoURL || "https://via.placeholder.com/120";
+  // Affichage profil
+  document.getElementById("userPhoto").src = user.photoURL || "https://via.placeholder.com/90";
+  document.getElementById("userEmail").textContent = user.email;
+  document.getElementById("userName").textContent = user.displayName || "Utilisateur";
 
-  const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
+  // ⚡ Afficher le modal notice automatiquement
+  document.getElementById('noticeModal').style.display = 'flex';
 
-  if (!snap.exists()) {
-    await setDoc(userRef, {
-      fullname: user.displayName || "",
-      email: user.email,
-      role: "user",
-      photo: user.photoURL || "",
-      createdAt: serverTimestamp(),
-      lastLogin: serverTimestamp()
+  // Requête Firestore : uniquement ses demandes
+  db.collection("forms")
+    .where("userId","==",user.uid)
+    .orderBy("createdAt","desc")
+    .get()
+    .then(snapshot=>{
+      container.innerHTML = "";
+      if(snapshot.empty){
+        container.innerHTML = "<p>Aucune demande trouvée.</p>";
+        return;
+      }
+      snapshot.forEach(doc=>{
+        const d = doc.data();
+        const statusClass =
+          d.status === "Accepté" ? "accepted" :
+          d.status === "Refusé" ? "refused" : "pending";
+
+        const card = document.createElement("div");
+        card.className = "request-card";
+        card.innerHTML = `
+          <h3>Demande</h3>
+          <p><strong>Email:</strong> ${d.email || "-"}</p>
+          <p><strong>Nom:</strong> ${d.fullName || "-"}</p>
+          <p><strong>Genre:</strong> ${d.gender || "-"}</p>
+          <p><strong>Téléphone:</strong>
+            ${d.phone ? `<a href="https://wa.me/${d.phone}" target="_blank">${d.phone}</a>` : "-"}
+          </p>
+          <p><strong>Réseau:</strong>
+            ${d.creatorLink ? `<a href="${d.creatorLink}" target="_blank">${d.creatorNetwork}</a>` : "-"}
+          </p>
+          <p><strong>Message:</strong> ${d.message || "-"}</p>
+          <p class="status ${statusClass}">
+            Statut : ${d.status || "En attente"}
+          </p>
+        `;
+        container.appendChild(card);
+      });
+    })
+    .catch(err=>{
+      console.error("Erreur Firestore:", err);
+      container.innerHTML = "<p>Erreur lors du chargement des demandes.</p>";
     });
-  }
-
-  const data = (await getDoc(userRef)).data();
-  fullnameEl.value = data.fullname || "";
-  roleEl.textContent = data.role || "user";
-
-  // Si déjà admin, afficher le bouton admin
-  if (data.role === "admin") {
-    goAdminBtn.style.display = "block";
-  }
 });
 
-// ===== Sauvegarder profil =====
-document.getElementById("saveProfile").onclick = async () => {
-  if (!currentUser) return;
-  await updateDoc(doc(db, "users", currentUser.uid), {
-    fullname: fullnameEl.value
-  });
-  alert("✅ Profil enregistré");
+// Déconnexion
+document.getElementById("logoutBtn").onclick = async ()=>{
+  await auth.signOut();
+  window.location.href = "index.html";
 };
 
-// ===== Devenir admin =====
-document.getElementById("becomeAdmin").onclick = async () => {
-  const code = document.getElementById("adminCode").value.trim();
-  if (code !== "098326623890") {
-    alert("❌ Code admin incorrect");
-    return;
-  }
-  await updateDoc(doc(db, "users", currentUser.uid), {
-    role: "admin"
-  });
-  roleEl.textContent = "admin";
-  goAdminBtn.style.display = "block";
-  alert("✅ Vous êtes maintenant admin");
-};
-
-// ===== Aller vers admin.html =====
-goAdminBtn.onclick = () => {
-  location.href = "admin.html";
-};
-
-// ===== Déconnexion =====
-document.getElementById("logout").onclick = async () => {
-  await signOut(auth);
-  location.href = "index.html";
+// Bouton accepter notice
+document.getElementById("acceptNoticeBtn").onclick = ()=>{
+  document.getElementById('noticeModal').style.display='none';
 };
 </script>
 
