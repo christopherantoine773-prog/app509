@@ -138,12 +138,11 @@ auth.onAuthStateChanged(user => {
   document.getElementById("userEmail").textContent = user.email;
   document.getElementById("userName").textContent = user.displayName || "Utilisateur";
 
-  // Requête Firestore : uniquement ses demandes
+  // Requête Firestore : ses demandes en temps réel
   db.collection("forms")
     .where("userId","==",user.uid)
     .orderBy("createdAt","desc")
-    .get()
-    .then(snapshot=>{
+    .onSnapshot(snapshot=>{
       container.innerHTML = "";
       if(snapshot.empty){
         container.innerHTML = "<p>Aucune demande trouvée.</p>";
@@ -175,8 +174,7 @@ auth.onAuthStateChanged(user => {
         `;
         container.appendChild(card);
       });
-    })
-    .catch(err=>{
+    }, err=>{
       console.error("Erreur Firestore:", err);
       container.innerHTML = "<p>Erreur lors du chargement des demandes.</p>";
     });
