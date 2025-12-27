@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ａｐｐｓ⁵⁰９ | Connexion / Inscription</title>
+<title> Ａｐｐｓ⁵⁰⁹| Connexion / Inscription</title>
 
 <style>
 body{
@@ -61,10 +61,10 @@ input{
   color:#fff;
 }
 form{
-  display:none; /* cacher par défaut */
+  display:none;
 }
 .active{
-  display:block; /* formulaire visible */
+  display:block;
 }
 .switch-btns{
   display:flex;
@@ -125,14 +125,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 CONFIG FIREBASE */
+/* 🔥 CONFIG FIREBASE (app509cloud) */
 const firebaseConfig = {
-  apiKey: "AIzaSyBuUof-QAQBzLjB6wrSUGKEBvdZ3j5-TbI",
-  authDomain: "app509-ff54f.firebaseapp.com",
-  projectId: "app509-ff54f",
-  storageBucket: "app509-ff54f.firebasestorage.app",
-  messagingSenderId: "663727026922",
-  appId: "1:663727026922:web:07e66eae137b6fe436dd93"
+  apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
+  authDomain: "app509cloud.firebaseapp.com",
+  projectId: "app509cloud",
+  storageBucket: "app509cloud.firebasestorage.app",
+  messagingSenderId: "445508086674",
+  appId: "1:445508086674:web:22d593d940bd328d436f4b"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -159,7 +159,7 @@ loginForm.onsubmit = async (e)=>{
   const password = document.getElementById("loginPassword").value;
   try{
     await signInWithEmailAndPassword(auth,email,password);
-    window.location.href = "profil.html"; // redirection après connexion
+    window.location.href = "profil.html";
   }catch(err){
     alert("⚠️ Email ou mot de passe incorrect !");
   }
@@ -181,7 +181,7 @@ signupForm.onsubmit = async (e)=>{
       createdAt: serverTimestamp(),
       lastLogin: serverTimestamp()
     });
-    window.location.href = "profil.html"; // redirection après inscription
+    window.location.href = "profil.html";
   }catch(err){
     alert("⚠️ Erreur : "+err.message);
   }
@@ -206,14 +206,13 @@ document.getElementById("googleLoginBtn").onclick = async ()=>{
     }else{
       await setDoc(userRef,{lastLogin:serverTimestamp()},{merge:true});
     }
-    // sauvegarder session
     sessionStorage.setItem("dpstore_user",JSON.stringify({
       fullname:user.displayName,
       email:user.email,
       role:snap.exists()?snap.data().role:"user",
       photo:user.photoURL
     }));
-    window.location.href = "profil.html"; // redirection après Google
+    window.location.href = "profil.html";
   }catch(e){
     alert("❌ Erreur connexion Google : "+e.message);
   }
