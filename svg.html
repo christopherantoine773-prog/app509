@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ａｐｐｓ⁵⁰９ | Vos demandes</title>
+<title>Mes demandes — Ａｐｐｓ⁵⁰９</title>
 
 <style>
 body{
@@ -13,96 +13,90 @@ body{
   color:#fff;
 }
 header{
-  background:rgba(0,0,0,0.65);
-  padding:16px 20px;
-  border-bottom:1px solid rgba(255,255,255,0.12);
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  background:rgba(0,0,0,0.7);
+  padding:20px;
+  border-bottom:1px solid rgba(255,255,255,0.2);
+  text-align:center;
 }
 header h1{
   margin:0;
-  font-size:1.6rem;
-  line-height:1;
+  font-size:1.8rem;
   background:linear-gradient(90deg,#fff,#aaa);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 .container{
-  max-width:440px;
-  margin:30px auto;
-  background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.15);
-  border-radius:18px;
-  padding:22px;
+  max-width:1000px;
+  margin:20px auto;
+  padding:15px;
 }
-.request-card{
-  border:1px solid rgba(255,255,255,0.2);
-  border-radius:12px;
-  padding:12px;
-  margin-bottom:12px;
-  background:rgba(0,0,0,0.35);
+.form-card{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(0,170,255,0.25);
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:15px;
 }
-.request-card img{
+.form-card img{
   width:60px;
   height:60px;
   border-radius:50%;
   border:2px solid #00aaff;
   object-fit:cover;
   display:block;
-  margin:0 auto 8px auto;
+  margin-bottom:8px;
 }
-.request-card p{
-  margin:4px 0;
-  font-size:0.85rem;
-  word-break: break-word;
+.form-card h2{
+  margin:0 0 10px 0;
+  font-size:1.2rem;
+  color:#00aaff;
 }
-button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
+.form-card p{
+  margin:5px 0;
+}
+a.whatsapp-link{
+  color:#25D366;
+  text-decoration:none;
+  font-weight:bold;
+}
+a.whatsapp-link:hover{
+  text-decoration:underline;
+}
+button.logout{
+  background:red;
+  color:white;
+  margin-top:20px;
+  padding:10px 15px;
   border:none;
   border-radius:12px;
-  background:#28a745;
-  color:white;
-  font-weight:600;
   cursor:pointer;
 }
-button:hover{
-  background:#1e7e34;
-}
-footer{
-  text-align:center;
-  margin:25px 0;
-  font-size:0.85rem;
-  color:#aaa;
-}
-.empty{
-  text-align:center;
-  color:#aaa;
-  margin-top:20px;
+button.logout:hover{
+  background:#ff6600;
 }
 </style>
 </head>
 
 <body>
+
 <header>
-  <h1>Vos demandes</h1>
+  <h1>Mes demandes — Ａｐｐｓ⁵⁰９</h1>
 </header>
 
-<div class="container" id="requestsContainer">
-  <p class="empty">Chargement des demandes...</p>
+<div class="container" id="formsContainer">
+  <!-- Les formulaires de l'utilisateur seront injectés ici -->
 </div>
 
-<button onclick="window.location.href='app509.html'">⬅️ Retour au formulaire</button>
+<div class="container">
+  <button class="logout" id="logoutBtn">Déconnexion</button>
+</div>
 
-<footer>© 2025 — Ａｐｐｓ⁵⁰９</footer>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
-<script>
+/* Config Firebase */
 const firebaseConfig = {
   apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
   authDomain: "app509cloud.firebaseapp.com",
@@ -111,54 +105,66 @@ const firebaseConfig = {
   messagingSenderId: "445508086674",
   appId: "1:445508086674:web:22d593d940bd328d436f4b"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const auth = firebase.auth();
 
-const container = document.getElementById("requestsContainer");
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-auth.onAuthStateChanged(async user => {
+const container = document.getElementById("formsContainer");
+
+/* Vérifier utilisateur connecté */
+onAuthStateChanged(auth, async (user) => {
   if(!user){
-    alert("❌ Veuillez vous connecter.");
-    window.location.href = "index.html";
+    location.href = "index.html";
     return;
   }
 
-  // Récupère uniquement les demandes de l'utilisateur connecté
-  const querySnapshot = await db.collection("forms")
-    .where("email", "==", user.email)
-    .orderBy("timestamp", "desc")
-    .get();
+  // Récupérer uniquement les formulaires de cet utilisateur
+  const formsSnap = await getDocs(query(
+    collection(db,"forms"), 
+    where("userId","==",user.uid), 
+    orderBy("timestamp","desc")
+  ));
 
-  container.innerHTML = "";
-
-  if(querySnapshot.empty){
-    container.innerHTML = '<p class="empty">Aucune demande pour le moment.</p>';
+  if(formsSnap.empty){
+    container.innerHTML = "<p>Vous n'avez soumis aucune demande pour le moment.</p>";
     return;
   }
 
-  querySnapshot.forEach(doc => {
-    const data = doc.data();
+  formsSnap.forEach(docSnap => {
+    const data = docSnap.data();
     const card = document.createElement("div");
-    card.className = "request-card";
+    card.className = "form-card";
+
+    // Lien WhatsApp si numéro présent
+    const phoneLink = data.phone ? `<a class="whatsapp-link" href="https://wa.me/${data.phone.replace(/\D/g,'')}" target="_blank">${data.phone}</a>` : "-";
+
     card.innerHTML = `
-      <img src="${data.profilePhoto || 'https://via.placeholder.com/60'}" alt="Photo de profil">
-      <p><strong>Compte :</strong> ${data.accountName || '-'}</p>
-      <p><strong>Nom complet :</strong> ${data.fullName || '-'}</p>
-      <p><strong>Genre :</strong> ${data.gender || '-'}</p>
-      <p><strong>Email :</strong> ${data.email || '-'}</p>
-      <p><strong>Téléphone :</strong> ${data.phone || '-'}</p>
-      <p><strong>Région :</strong> ${data.region || '-'}</p>
-      <p><strong>Niveau :</strong> ${data.level || '-'}</p>
-      <p><strong>Créateur :</strong> ${data.isCreator ? 'Oui' : 'Non'}</p>
-      <p><strong>Réseau :</strong> ${data.creatorNetwork || '-'}</p>
-      <p><strong>Lien :</strong> ${data.creatorLink || '-'}</p>
-      <p><strong>Message :</strong> ${data.message || '-'}</p>
-      <p><strong>Envoyé le :</strong> ${data.timestamp ? data.timestamp.toDate().toLocaleString() : '-'}</p>
+      <img src="${data.profilePhoto || 'https://via.placeholder.com/60'}" alt="Photo profil">
+      <h2>Formulaire ID: ${docSnap.id}</h2>
+      <p><strong>Compte:</strong> ${data.accountName || "-"}</p>
+      <p><strong>Nom complet:</strong> ${data.fullName || "-"}</p>
+      <p><strong>Email:</strong> ${data.email || "-"}</p>
+      <p><strong>Genre:</strong> ${data.gender || "-"}</p>
+      <p><strong>Téléphone:</strong> ${phoneLink}</p>
+      <p><strong>Région:</strong> ${data.region || "-"}</p>
+      <p><strong>Niveau:</strong> ${data.level || "-"}</p>
+      <p><strong>Créateur:</strong> ${data.isCreator ? "Oui" : "Non"}</p>
+      <p><strong>Réseau:</strong> ${data.creatorNetwork || "-"}</p>
+      <p><strong>Lien:</strong> ${data.creatorLink || "-"}</p>
+      <p><strong>Message:</strong> ${data.message || "-"}</p>
+      <p><strong>Soumis le:</strong> ${data.timestamp?.toDate?.()?.toLocaleString() || "-"}</p>
+      <p><strong>Statut actuel:</strong> ${data.status || 'pending'}</p>
     `;
     container.appendChild(card);
   });
 });
+
+/* Déconnexion */
+document.getElementById("logoutBtn").onclick = async () => {
+  await signOut(auth);
+  location.href = "index.html";
+};
 </script>
 
 </body>
