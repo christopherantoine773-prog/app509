@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ａｐｐｓ⁵⁰９ | Formulaire</title>
-
+<title>Ａｐｐｓ⁵⁰９ | Créer un compte / Connexion</title>
 <style>
 body{
   margin:0;
@@ -12,8 +11,6 @@ body{
   background:linear-gradient(135deg,#000,#2c2c2c);
   color:#fff;
 }
-
-/* ===== HEADER ===== */
 header{
   background:rgba(0,0,0,0.65);
   padding:16px 20px;
@@ -21,17 +18,31 @@ header{
   display:flex;
   justify-content:center;
   align-items:center;
+  flex-direction:column;
+  gap:8px;
 }
 header h1{
   margin:0;
-  font-size:1.6rem;
-  line-height:1;
+  font-size:1.8rem;
   background:linear-gradient(90deg,#fff,#aaa);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-
-/* ===== CONTAINER ===== */
+#loginBtn{
+  padding:8px 16px;
+  border-radius:12px;
+  border:none;
+  background:#00aaff;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.2s;
+}
+#loginBtn:hover{
+  background:#FFD700;
+  color:#000;
+  box-shadow:0 0 12px #FFD700aa;
+}
 .container{
   max-width:440px;
   margin:30px auto;
@@ -40,8 +51,6 @@ header h1{
   border-radius:18px;
   padding:22px;
 }
-
-/* ===== SECTIONS ===== */
 .form-section{
   margin-bottom:20px;
 }
@@ -52,15 +61,13 @@ header h1{
   padding-left:10px;
   border-left:3px solid #00aaff;
 }
-
-/* ===== INPUTS ===== */
 label{
   font-size:0.85rem;
   color:#ccc;
   display:block;
   margin-bottom:4px;
 }
-input, select, textarea{
+input, select{
   width:100%;
   padding:10px;
   border-radius:10px;
@@ -70,106 +77,6 @@ input, select, textarea{
   outline:none;
   box-sizing:border-box;
 }
-
-/* ===== GENRE ===== */
-.gender-box{
-  display:flex;
-  gap:10px;
-  margin-top:6px;
-}
-.gender-btn{
-  flex:1;
-  padding:10px 0;
-  font-size:1.5rem;
-  text-align:center;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,0.25);
-  cursor:pointer;
-  transition:0.2s;
-}
-.gender-btn.active{
-  background:#00aaff;
-  color:black;
-  box-shadow:0 0 8px #00aaffaa;
-}
-
-/* ===== PHONE ===== */
-.phone-box{
-  display:flex;
-  gap:10px;
-}
-.phone-box select{ width:35%; }
-.phone-box input{ width:65%; }
-
-/* ===== CHECKBOX ===== */
-.status{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:6px;
-}
-.status label{
-  margin:0;
-  font-size:0.85rem;
-  color:#ccc;
-}
-
-/* Alignement spécifique pour Compte actif */
-.status.compact{
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  gap:8px;
-}
-
-/* ===== CRÉATEUR ===== */
-.creator-section{
-  margin-top:10px;
-}
-#creatorLinkBox{
-  display:none;
-  margin-top:10px;
-}
-#creatorLinkBox input, #creatorLinkBox select{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.18);
-  background:rgba(0,0,0,0.45);
-  color:white;
-  margin-bottom:10px;
-}
-
-/* ===== RÉSEAU SOCIAL AVEC ICÔNES ===== */
-.network-btns{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:6px;
-}
-.network-btn{
-  flex:1;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  padding:8px 10px;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,0.25);
-  cursor:pointer;
-  font-size:0.85rem;
-  background:rgba(0,0,0,0.45);
-  transition:0.2s;
-}
-.network-btn.active{
-  background:#00aaff;
-  color:black;
-  box-shadow:0 0 6px #00aaffaa;
-}
-.network-btn img{
-  display:block;
-}
-
-/* ===== BUTTON ===== */
 button{
   width:100%;
   padding:12px;
@@ -185,181 +92,199 @@ button:hover{
   background:#00aaff;
   color:black;
 }
-
-/* ===== FOOTER ===== */
 footer{
   text-align:center;
   margin:25px 0;
   font-size:0.85rem;
   color:#aaa;
 }
+#loginForm{
+  display:none;
+}
 </style>
 </head>
-
 <body>
 
 <header>
   <h1>Ａｐｐｓ⁵⁰９</h1>
+  <button id="loginBtn">Déjà un compte ? Connexion</button>
 </header>
 
 <div class="container">
-<form id="apps509Form">
 
-<!-- ===== COMPTE ===== -->
-<div class="form-section">
-  <div class="form-title">Compte</div>
-
-  <label>Nom du compte actuel</label>
-  <input type="text" id="currentAccount">
-
-  <div class="status compact">
-    <input type="checkbox" checked id="accountActive">
-    <label for="accountActive">Compte actif</label>
+<form id="signupForm">
+  <div class="form-section">
+    <div class="form-title">Nom</div>
+    <label>Nom complet</label>
+    <input type="text" id="fullname" required placeholder="Nom et prénom">
   </div>
-</div>
-
-<!-- ===== IDENTITÉ ===== -->
-<div class="form-section">
-  <div class="form-title">Identité</div>
-
-  <label>Nom complet</label>
-  <input type="text" required placeholder="Nom et prénom">
-
-  <label>Genre</label>
-  <div class="gender-box">
-    <div class="gender-btn active" data-gender="♂" onclick="setGender(this)">♂</div>
-    <div class="gender-btn" data-gender="♀" onclick="setGender(this)">♀</div>
+  <div class="form-section">
+    <div class="form-title">Email</div>
+    <label>Email</label>
+    <input type="email" id="email" required placeholder="email@example.com">
   </div>
-  <input type="hidden" id="gender" value="♂">
-</div>
-
-<!-- ===== CONTACT ===== -->
-<div class="form-section">
-  <div class="form-title">Contact</div>
-
-  <label>Email</label>
-  <input type="email" required placeholder="email@example.com">
-
-  <label>Téléphone</label>
-  <div class="phone-box">
-    <select>
-      <option value="+509">🇭🇹 +509</option>
-      <option value="+1">🇺🇸 +1</option>
-      <option value="+33">🇫🇷 +33</option>
-      <option value="+44">🇬🇧 +44</option>
+  <div class="form-section">
+    <div class="form-title">Mot de passe</div>
+    <label>Mot de passe</label>
+    <input type="password" id="password" required placeholder="••••••••">
+  </div>
+  <div class="form-section">
+    <div class="form-title">Confirmer le mot de passe</div>
+    <label>Confirmer le mot de passe</label>
+    <input type="password" id="confirmPassword" required placeholder="••••••••">
+  </div>
+  <div class="form-section">
+    <div class="form-title">Rôle</div>
+    <select id="roleSelect">
+      <option value="user" selected>Utilisateur</option>
+      <option value="admin">Administrateur</option>
     </select>
-    <input type="tel" placeholder="Numéro">
   </div>
-</div>
-
-<!-- ===== JEU ===== -->
-<div class="form-section">
-  <div class="form-title">Jeu</div>
-
-  <label>UID du joueur</label>
-  <input type="text" placeholder="UID / ID du joueur">
-
-  <label>Région</label>
-  <select id="playerRegion">
-    <option value="amerique-nord">Amérique du Nord</option>
-    <option value="amerique-sud">Amérique du Sud</option>
-    <option value="europe">Europe</option>
-    <option value="mena">MENA</option>
-  </select>
-
-  <label>Niveau du compte</label>
-  <select id="playerLevel">
-    <script>
-      for(let i=1;i<=120;i++){
-        document.write(`<option value="${i}">${i}</option>`);
-      }
-    </script>
-  </select>
-</div>
-
-<!-- ===== CRÉATEUR ===== -->
-<div class="form-section creator-section">
-  <div class="form-title">Créateur de contenu</div>
-
-  <div class="status">
-    <input type="checkbox" id="isCreator" onchange="toggleCreator()">
-    <label for="isCreator">Activer</label>
+  <div class="form-section" id="adminCodeSection" style="display:none;">
+    <div class="form-title">Code administrateur</div>
+    <label>Entrez le code secret pour devenir admin</label>
+    <input type="text" id="adminCode" placeholder="Code admin">
   </div>
-
-  <div id="creatorLinkBox">
-    <label>Réseau social</label>
-    <div class="network-btns">
-      <div class="network-btn active" data-network="tiktok" onclick="setNetwork(this)">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" width="20"> TikTok
-      </div>
-      <div class="network-btn" data-network="youtube" onclick="setNetwork(this)">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" width="20"> YouTube
-      </div>
-      <div class="network-btn" data-network="instagram" onclick="setNetwork(this)">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="20"> Instagram
-      </div>
-      <div class="network-btn" data-network="twitch" onclick="setNetwork(this)">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitch.svg" width="20"> Twitch
-      </div>
-      <div class="network-btn" data-network="facebook" onclick="setNetwork(this)">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png" width="20"> Facebook
-      </div>
-    </div>
-    <input type="hidden" id="creatorNetworkValue" value="tiktok">
-
-    <label>Lien du profil</label>
-    <input type="url" placeholder="https://">
-  </div>
-</div>
-
-<!-- ===== MESSAGE ===== -->
-<div class="form-section">
-  <div class="form-title">Message</div>
-
-  <textarea rows="4" placeholder="Informations supplémentaires"></textarea>
-</div>
-
-<button type="submit">Envoyer</button>
-
+  <button type="submit">Créer le compte</button>
 </form>
+
+<button id="googleLoginBtn" style="margin-top:10px; background:#2aa6ff;">Se connecter avec Google</button>
+
+<form id="loginForm">
+  <div class="form-section">
+    <div class="form-title">Connexion</div>
+    <label>Email</label>
+    <input type="email" id="loginEmail" required placeholder="email@example.com">
+    <label>Mot de passe</label>
+    <input type="password" id="loginPassword" required placeholder="••••••••">
+    <button type="submit">Se connecter</button>
+  </div>
+</form>
+
 </div>
 
 <footer>© 2025 — Ａｐｐｓ⁵⁰９</footer>
 
-<script>
-/* Nom du compte auto (modifiable) */
-let currentUser = JSON.parse(sessionStorage.getItem("dpstore_user") || "{}");
-if(currentUser.username){
-  document.getElementById("currentAccount").value = currentUser.username;
-}
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
 
-/* Genre */
-function setGender(el){
-  document.querySelectorAll(".gender-btn").forEach(b => b.classList.remove("active"));
-  el.classList.add("active");
-  document.getElementById("gender").value = el.getAttribute("data-gender");
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyAm1-53K6VuK7wdwu67pUjLU3t7S_-bwJo",
+  authDomain: "app509-d7bc6.firebaseapp.com",
+  projectId: "app509-d7bc6",
+  storageBucket: "app509-d7bc6.firebasestorage.app",
+  messagingSenderId: "1139351082",
+  appId: "1:1139351082:web:18461a1249b189ef7eed53"
+};
 
-/* Créateur */
-function toggleCreator(){
-  document.getElementById("creatorLinkBox").style.display =
-    document.getElementById("isCreator").checked ? "block" : "none";
-}
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-/* Réseau social avec icône */
-function setNetwork(el){
-  document.querySelectorAll(".network-btn").forEach(b=>b.classList.remove("active"));
-  el.classList.add("active");
-  document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
-}
+const loginBtn = document.getElementById("loginBtn");
+const signupForm = document.getElementById("signupForm");
+const loginForm = document.getElementById("loginForm");
+const roleSelect = document.getElementById("roleSelect");
+const adminCodeSection = document.getElementById("adminCodeSection");
+const googleBtn = document.getElementById("googleLoginBtn");
 
-/* Submit */
-document.getElementById("apps509Form").addEventListener("submit",e=>{
-  e.preventDefault();
-  alert("✅ Formulaire envoyé avec succès !");
-  e.target.reset();
+loginBtn.addEventListener("click",()=>{
+  signupForm.style.display = "none";
+  loginForm.style.display = "block";
 });
-</script>
 
+roleSelect.addEventListener("change",()=>{
+  adminCodeSection.style.display = roleSelect.value === "admin" ? "block" : "none";
+});
+
+// Création de compte
+signupForm.addEventListener("submit", async e=>{
+  e.preventDefault();
+  const fullname = document.getElementById("fullname").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+  let role = roleSelect.value;
+
+  if(password !== confirmPassword){
+    alert("⚠️ Les mots de passe ne correspondent pas !");
+    return;
+  }
+
+  if(role === "admin"){
+    const adminCode = document.getElementById("adminCode").value.trim();
+    if(adminCode !== "098326623890"){
+      alert("⚠️ Code admin incorrect ! Le compte sera créé comme utilisateur.");
+      role = "user";
+    }
+  }
+
+  try{
+    const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+    const user = userCredential.user;
+
+    await setDoc(doc(db,"users",user.uid),{
+      fullname,
+      email,
+      role,
+      createdAt: serverTimestamp()
+    });
+
+    sessionStorage.setItem("dpstore_user", JSON.stringify({ uid: user.uid, email, role, fullname }));
+    alert("✅ Compte créé avec succès !");
+    location.href = "profil.html";
+  } catch(err){
+    alert("⚠️ Erreur : " + err.message);
+  }
+});
+
+// Connexion
+loginForm.addEventListener("submit", async e=>{
+  e.preventDefault();
+  const loginEmail = document.getElementById("loginEmail").value.trim();
+  const loginPassword = document.getElementById("loginPassword").value;
+
+  try{
+    const userCredential = await signInWithEmailAndPassword(auth,loginEmail,loginPassword);
+    const user = userCredential.user;
+    const userSnap = await getDoc(doc(db,"users",user.uid));
+    if(userSnap.exists()){
+      const data = userSnap.data();
+      sessionStorage.setItem("dpstore_user", JSON.stringify({ uid: user.uid, email: data.email, role: data.role, fullname: data.fullname }));
+      alert("✅ Connexion réussie !");
+      location.href = "profil.html";
+    }
+  } catch(err){
+    alert("⚠️ Email ou mot de passe incorrect !");
+  }
+});
+
+// Connexion Google
+googleBtn.onclick = async () => {
+  const provider = new GoogleAuthProvider();
+  try{
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    const userRef = doc(db,"users",user.uid);
+    const userSnap = await getDoc(userRef);
+    if(!userSnap.exists()){
+      await setDoc(userRef,{
+        fullname: user.displayName,
+        email: user.email,
+        role: "user",
+        createdAt: serverTimestamp()
+      });
+    }
+
+    sessionStorage.setItem("dpstore_user", JSON.stringify({ uid: user.uid, email: user.email, role: "user", fullname: user.displayName }));
+    location.href = "profil.html";
+  } catch(err){
+    alert("⚠️ Erreur Google Auth : " + err.message);
+  }
+};
+</script>
 </body>
 </html>
