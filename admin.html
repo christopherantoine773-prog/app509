@@ -30,61 +30,67 @@ header h1{
   margin:20px auto;
   padding:15px;
 }
+.user-section{
+  margin-bottom:20px;
+  border:1px solid rgba(0,170,255,0.25);
+  border-radius:12px;
+  padding:10px;
+  background:rgba(0,0,0,0.2);
+}
+.user-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+  padding:8px;
+  border-bottom:1px solid rgba(255,255,255,0.2);
+}
+.user-header img{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:2px solid #00aaff;
+  object-fit:cover;
+  margin-right:10px;
+}
+.user-header span{
+  font-weight:bold;
+}
+.user-forms{
+  display:none;
+  padding:10px 0;
+}
 .form-card{
   background:rgba(255,255,255,0.08);
   border:1px solid rgba(0,170,255,0.25);
   border-radius:15px;
-  padding:15px;
-  margin-bottom:15px;
-}
-.form-card img{
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  border:2px solid #00aaff;
-  object-fit:cover;
-  display:block;
-  margin-bottom:8px;
-}
-.form-card h2{
-  margin:0 0 10px 0;
-  font-size:1.2rem;
-  color:#00aaff;
+  padding:10px;
+  margin-bottom:10px;
 }
 .form-card p{
-  margin:5px 0;
+  margin:4px 0;
 }
-.status-btns{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
-.status-btn{
-  flex:1;
-  padding:8px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:bold;
+select.status-select{
+  margin-top:6px;
+  padding:5px;
+  border-radius:6px;
+  border:1px solid #00aaff;
+  background:rgba(0,0,0,0.3);
   color:white;
+  font-weight:bold;
+  cursor:pointer;
 }
-.status-btn.pending{background:gray;}
-.status-btn.accepted{background:green;}
-.status-btn.refused{background:red;}
 button.logout{
   background:red;
   color:white;
+  margin-top:20px;
+  padding:10px 15px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
 }
 button.logout:hover{
   background:#ff6600;
-}
-button.back{
-  background:#00aa00;
-  color:white;
-}
-button.back:hover{
-  background:#33cc33;
 }
 </style>
 </head>
@@ -95,12 +101,11 @@ button.back:hover{
   <h1>Admin Panel — Ａｐｐｓ⁵⁰９</h1>
 </header>
 
-<div class="container" id="formsContainer">
-  <!-- Les formulaires seront injectés ici -->
+<div class="container" id="usersContainer">
+  <!-- Les utilisateurs et leurs formulaires seront injectés ici -->
 </div>
 
 <div class="container">
-  <button class="back" onclick="location.href='profil.html'">⬅️ Retour vers profil</button>
   <button class="logout" id="logoutBtn">Déconnexion</button>
 </div>
 
@@ -109,7 +114,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, collection, getDocs, query, orderBy, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* 🔥 Config Firebase */
+/* Config Firebase */
 const firebaseConfig = {
   apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
   authDomain: "app509cloud.firebaseapp.com",
@@ -123,75 +128,105 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const container = document.getElementById("formsContainer");
+const container = document.getElementById("usersContainer");
 
-/* Vérifier si admin connecté */
+/* Vérifier admin */
 onAuthStateChanged(auth, async (user) => {
   if(!user){
     location.href = "index.html";
     return;
   }
 
-  // Vérifier rôle admin
-  const userDocSnap = await getDocs(collection(db,"users"));
-  const userDoc = userDocSnap.docs.find(d=>d.id===user.uid);
-  if(!userDoc || userDoc.data().role !== "admin"){
+  const userDoc = await getDocs(collection(db,"users"));
+  const currentUserDoc = userDoc.docs.find(d=>d.id===user.uid);
+  if(!currentUserDoc || currentUserDoc.data().role !== "admin"){
     alert("❌ Accès refusé, vous devez être admin !");
     location.href = "profil.html";
     return;
   }
 
   // Récupérer tous les formulaires
-  const formsSnap = await getDocs(query(collection(db,"forms"), orderBy("timestamp","desc")));
+  const formsSnap = await getDocs(query(collection(db,"forms"), orderBy("email","asc")));
   if(formsSnap.empty){
     container.innerHTML = "<p>Aucun formulaire soumis pour le moment.</p>";
     return;
   }
 
-  formsSnap.forEach(docSnap => {
+  // Grouper par email
+  const grouped = {};
+  formsSnap.forEach(docSnap=>{
     const data = docSnap.data();
-    const card = document.createElement("div");
-    card.className = "form-card";
+    if(!grouped[data.email]){
+      grouped[data.email] = [];
+    }
+    grouped[data.email].push({id: docSnap.id, ...data});
+  });
 
-    card.innerHTML = `
-      <img src="${data.profilePhoto || 'https://via.placeholder.com/60'}" alt="Photo profil">
-      <h2>Formulaire ID: ${docSnap.id}</h2>
-      <p><strong>Compte:</strong> ${data.accountName || "-"}</p>
-      <p><strong>Nom complet:</strong> ${data.fullName || "-"}</p>
-      <p><strong>Email:</strong> ${data.email || "-"}</p>
-      <p><strong>Genre:</strong> ${data.gender || "-"}</p>
-      <p><strong>Téléphone:</strong> ${data.phone || "-"}</p>
-      <p><strong>Région:</strong> ${data.region || "-"}</p>
-      <p><strong>Niveau:</strong> ${data.level || "-"}</p>
-      <p><strong>Créateur:</strong> ${data.isCreator ? "Oui" : "Non"}</p>
-      <p><strong>Réseau:</strong> ${data.creatorNetwork || "-"}</p>
-      <p><strong>Lien:</strong> ${data.creatorLink || "-"}</p>
-      <p><strong>Message:</strong> ${data.message || "-"}</p>
-      <p><strong>Soumis le:</strong> ${data.timestamp?.toDate?.()?.toLocaleString() || "-"}</p>
-      <div class="status-btns">
-        <button class="status-btn pending" onclick="updateStatus('${docSnap.id}','pending',this)">En attente</button>
-        <button class="status-btn accepted" onclick="updateStatus('${docSnap.id}','accepted',this)">Accepté</button>
-        <button class="status-btn refused" onclick="updateStatus('${docSnap.id}','refused',this)">Refusé</button>
-      </div>
-      <p><strong>Statut actuel:</strong> <span class="status-text">${data.status || 'pending'}</span></p>
-    `;
-    container.appendChild(card);
+  // Créer sections par email
+  for(const email in grouped){
+    const userSection = document.createElement("div");
+    userSection.className = "user-section";
+
+    const firstForm = grouped[email][0];
+    const header = document.createElement("div");
+    header.className = "user-header";
+    header.innerHTML = `<div style="display:flex;align-items:center">
+                          <img src="${firstForm.profilePhoto || 'https://via.placeholder.com/40'}">
+                          <span>${email}</span>
+                        </div>
+                        <div>Voir demandes ▼</div>`;
+    
+    const formsDiv = document.createElement("div");
+    formsDiv.className = "user-forms";
+
+    grouped[email].forEach(form=>{
+      const formCard = document.createElement("div");
+      formCard.className = "form-card";
+      const phoneLink = form.phone ? `<a href="https://wa.me/${form.phone.replace(/\D/g,'')}" target="_blank">${form.phone}</a>` : "-";
+
+      formCard.innerHTML = `
+        <p><strong>Compte:</strong> ${form.accountName || "-"}</p>
+        <p><strong>Nom complet:</strong> ${form.fullName || "-"}</p>
+        <p><strong>Genre:</strong> ${form.gender || "-"}</p>
+        <p><strong>Région:</strong> ${form.region || "-"}</p>
+        <p><strong>Niveau:</strong> ${form.level || "-"}</p>
+        <p><strong>Créateur:</strong> ${form.isCreator ? "Oui" : "Non"}</p>
+        <p><strong>Réseau:</strong> ${form.creatorNetwork || "-"}</p>
+        <p><strong>Lien:</strong> ${form.creatorLink || "-"}</p>
+        <p><strong>Téléphone:</strong> ${phoneLink}</p>
+        <p><strong>Message:</strong> ${form.message || "-"}</p>
+        <p><strong>Soumis le:</strong> ${form.timestamp?.toDate?.()?.toLocaleString() || "-"}</p>
+        <p>
+          <strong>Statut:</strong>
+          <select class="status-select" data-formid="${form.id}">
+            <option value="pending" ${form.status==='pending'?'selected':''}>En attente</option>
+            <option value="accepted" ${form.status==='accepted'?'selected':''}>Accepté</option>
+            <option value="rejected" ${form.status==='rejected'?'selected':''}>Refusé</option>
+          </select>
+        </p>
+      `;
+      formsDiv.appendChild(formCard);
+    });
+
+    header.addEventListener("click", ()=>{ 
+      formsDiv.style.display = formsDiv.style.display === "block" ? "none" : "block"; 
+    });
+
+    userSection.appendChild(header);
+    userSection.appendChild(formsDiv);
+    container.appendChild(userSection);
+  }
+
+  // Changement de statut
+  container.addEventListener("change", async (e)=>{
+    if(e.target.classList.contains("status-select")){
+      const formId = e.target.getAttribute("data-formid");
+      const newStatus = e.target.value;
+      await updateDoc(doc(db,"forms",formId), {status: newStatus});
+      alert(`✅ Statut mis à jour en "${newStatus}"`);
+    }
   });
 });
-
-/* Mettre à jour le statut */
-async function updateStatus(formId, status, btn){
-  try{
-    const formRef = doc(db,"forms",formId);
-    await updateDoc(formRef, { status });
-    const statusText = btn.closest(".form-card").querySelector(".status-text");
-    statusText.textContent = status;
-    alert(`✅ Statut mis à jour : ${status}`);
-  }catch(err){
-    console.error(err);
-    alert("❌ Impossible de mettre à jour le statut !");
-  }
-}
 
 /* Déconnexion */
 document.getElementById("logoutBtn").onclick = async () => {
