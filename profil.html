@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ａｐｐｓ⁵⁰９ | Profil</title>
+<title>Ａｐｐｓ⁵⁰９ | Formulaire</title>
 
 <style>
 body{
@@ -12,118 +12,341 @@ body{
   background:linear-gradient(135deg,#000,#2c2c2c);
   color:#fff;
 }
-.container{
-  max-width:420px;
-  margin:40px auto;
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.15);
-  border-radius:18px;
-  padding:22px;
-  text-align:center;
+
+/* ===== HEADER ===== */
+header{
+  background:rgba(0,0,0,0.65);
+  padding:16px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.12);
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
-h2{
-  margin-top:0;
+header h1{
+  margin:0;
+  font-size:1.6rem;
+  line-height:1;
   background:linear-gradient(90deg,#fff,#aaa);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
+
+/* ===== CONTAINER ===== */
+.container{
+  max-width:440px;
+  margin:30px auto;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:18px;
+  padding:22px;
+}
+
+/* ===== SECTIONS ===== */
+.form-section{
+  margin-bottom:20px;
+}
+.form-title{
+  font-size:0.9rem;
+  color:#aaa;
+  margin-bottom:10px;
+  padding-left:10px;
+  border-left:3px solid #00aaff;
+}
+
+/* ===== INPUTS ===== */
 label{
-  display:block;
-  margin-top:12px;
   font-size:0.85rem;
   color:#ccc;
-  text-align:left;
+  display:block;
+  margin-bottom:4px;
 }
-input{
+input, select, textarea{
   width:100%;
   padding:10px;
   border-radius:10px;
-  border:1px solid rgba(255,255,255,0.2);
-  background:rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(0,0,0,0.45);
   color:white;
+  outline:none;
+  box-sizing:border-box;
 }
+
+/* ===== GENRE ===== */
+.gender-box{
+  display:flex;
+  gap:10px;
+  margin-top:6px;
+}
+.gender-btn{
+  flex:1;
+  padding:10px 0;
+  font-size:1.5rem;
+  text-align:center;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.25);
+  cursor:pointer;
+  transition:0.2s;
+}
+.gender-btn.active{
+  background:#00aaff;
+  color:black;
+  box-shadow:0 0 8px #00aaffaa;
+}
+
+/* ===== PHONE ===== */
+.phone-box{
+  display:flex;
+  gap:10px;
+}
+.phone-box select{ width:35%; }
+.phone-box input{ width:65%; }
+
+/* ===== CHECKBOX ===== */
+.status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:6px;
+}
+.status label{
+  margin:0;
+  font-size:0.85rem;
+  color:#ccc;
+}
+
+/* Alignement spécifique pour Compte actif */
+.status.compact{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+}
+
+/* ===== CRÉATEUR ===== */
+.creator-section{
+  margin-top:10px;
+}
+#creatorLinkBox{
+  display:none;
+  margin-top:10px;
+}
+#creatorLinkBox input, #creatorLinkBox select{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(0,0,0,0.45);
+  color:white;
+  margin-bottom:10px;
+}
+
+/* ===== RÉSEAU SOCIAL AVEC ICÔNES ===== */
+.network-btns{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:6px;
+}
+.network-btn{
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.25);
+  cursor:pointer;
+  font-size:0.85rem;
+  background:rgba(0,0,0,0.45);
+  transition:0.2s;
+}
+.network-btn.active{
+  background:#00aaff;
+  color:black;
+  box-shadow:0 0 6px #00aaffaa;
+}
+.network-btn img{
+  display:block;
+}
+
+/* ===== BUTTON ===== */
 button{
   width:100%;
   padding:12px;
-  margin-top:14px;
+  margin-top:10px;
   border:none;
   border-radius:12px;
-  background:#00aaff;
-  color:black;
+  background:#555;
+  color:white;
   font-weight:600;
   cursor:pointer;
 }
 button:hover{
-  background:#FFD700;
+  background:#00aaff;
+  color:black;
 }
-.small{
-  font-size:0.8rem;
-  color:#aaa;
-  margin-top:6px;
-}
-.admin-box{
-  margin-top:20px;
-  padding:14px;
+
+/* ===== BOUTON PROFIL ===== */
+#profilBtn{
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  border:none;
   border-radius:12px;
-  background:rgba(255,0,0,0.08);
-  border:1px solid rgba(255,0,0,0.3);
-}
-.role{
-  margin-top:10px;
-  font-weight:bold;
-  color:#00aaff;
-}
-.logout{
-  background:red;
+  background:#28a745;
   color:white;
+  font-weight:600;
+  cursor:pointer;
+  text-align:center;
 }
-.profile-pic{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  border:4px solid #00aaff;
-  object-fit:cover;
-  margin-bottom:15px;
+#profilBtn:hover{
+  background:#1e7e34;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  text-align:center;
+  margin:25px 0;
+  font-size:0.85rem;
+  color:#aaa;
 }
 </style>
 </head>
 
 <body>
 
+<header>
+  <h1>Ａｐｐｓ⁵⁰９</h1>
+</header>
+
 <div class="container">
-  <h2>Profil utilisateur</h2>
+<form id="apps509Form">
 
-  <img id="profilePic" class="profile-pic" src="https://via.placeholder.com/120" alt="Photo de profil">
+<!-- ===== COMPTE ===== -->
+<div class="form-section">
+  <div class="form-title">Compte</div>
 
-  <p><strong>Email :</strong></p>
-  <p id="email">—</p>
+  <label>Nom du compte actuel</label>
+  <input type="text" id="currentAccount">
+
+  <div class="status compact">
+    <input type="checkbox" checked id="accountActive">
+    <label for="accountActive">Compte actif</label>
+  </div>
+</div>
+
+<!-- ===== IDENTITÉ ===== -->
+<div class="form-section">
+  <div class="form-title">Identité</div>
 
   <label>Nom complet</label>
-  <input type="text" id="fullname" placeholder="Votre nom">
+  <input type="text" required placeholder="Nom et prénom">
 
-  <button id="saveProfile">💾 Enregistrer le profil</button>
-
-  <div class="role">
-    Rôle : <span id="role">user</span>
+  <label>Genre</label>
+  <div class="gender-box">
+    <div class="gender-btn active" data-gender="♂" onclick="setGender(this)">♂</div>
+    <div class="gender-btn" data-gender="♀" onclick="setGender(this)">♀</div>
   </div>
-
-  <!-- ===== ADMIN CODE ===== -->
-  <div class="admin-box">
-    <label>Code administrateur</label>
-    <input type="text" id="adminCode" placeholder="Code secret admin">
-    <button id="becomeAdmin">🔐 Devenir admin</button>
-    <div class="small">Accès réservé</div>
-    <button id="goAdminPage" style="margin-top:10px; display:none;">➡️ Aller vers Admin</button>
-  </div>
-
-  <button onclick="location.href='app509.html'">➡️ Aller vers Ａｐｐｓ⁵⁰９</button>
-  <button class="logout" id="logout">Déconnexion</button>
+  <input type="hidden" id="gender" value="♂">
 </div>
+
+<!-- ===== CONTACT ===== -->
+<div class="form-section">
+  <div class="form-title">Contact</div>
+
+  <label>Email</label>
+  <input type="email" required placeholder="email@example.com">
+
+  <label>Téléphone</label>
+  <div class="phone-box">
+    <select>
+      <option value="+509">🇭🇹 +509</option>
+      <option value="+1">🇺🇸 +1</option>
+      <option value="+33">🇫🇷 +33</option>
+      <option value="+44">🇬🇧 +44</option>
+    </select>
+    <input type="tel" placeholder="Numéro">
+  </div>
+</div>
+
+<!-- ===== JEU ===== -->
+<div class="form-section">
+  <div class="form-title">Jeu</div>
+
+  <label>UID du joueur</label>
+  <input type="text" placeholder="UID / ID du joueur">
+
+  <label>Région</label>
+  <select id="playerRegion">
+    <option value="amerique-nord">Amérique du Nord</option>
+    <option value="amerique-sud">Amérique du Sud</option>
+    <option value="europe">Europe</option>
+    <option value="mena">MENA</option>
+  </select>
+
+  <label>Niveau du compte</label>
+  <select id="playerLevel">
+    <script>
+      for(let i=1;i<=120;i++){
+        document.write(`<option value="${i}">${i}</option>`);
+      }
+    </script>
+  </select>
+</div>
+
+<!-- ===== CRÉATEUR ===== -->
+<div class="form-section creator-section">
+  <div class="form-title">Créateur de contenu</div>
+
+  <div class="status">
+    <input type="checkbox" id="isCreator" onchange="toggleCreator()">
+    <label for="isCreator">Activer</label>
+  </div>
+
+  <div id="creatorLinkBox">
+    <label>Réseau social</label>
+    <div class="network-btns">
+      <div class="network-btn active" data-network="tiktok" onclick="setNetwork(this)">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tiktok.svg" width="20"> TikTok
+      </div>
+      <div class="network-btn" data-network="youtube" onclick="setNetwork(this)">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" width="20"> YouTube
+      </div>
+      <div class="network-btn" data-network="instagram" onclick="setNetwork(this)">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="20"> Instagram
+      </div>
+      <div class="network-btn" data-network="twitch" onclick="setNetwork(this)">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitch.svg" width="20"> Twitch
+      </div>
+      <div class="network-btn" data-network="facebook" onclick="setNetwork(this)">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png" width="20"> Facebook
+      </div>
+    </div>
+    <input type="hidden" id="creatorNetworkValue" value="tiktok">
+
+    <label>Lien du profil</label>
+    <input type="url" placeholder="https://">
+  </div>
+</div>
+
+<!-- ===== MESSAGE ===== -->
+<div class="form-section">
+  <div class="form-title">Message</div>
+  <textarea rows="4" placeholder="Informations supplémentaires"></textarea>
+</div>
+
+<button type="submit">Envoyer</button>
+<button type="button" id="profilBtn" onclick="goToProfil()">Retour vers Profil</button>
+
+</form>
+</div>
+
+<footer>© 2025 — Ａｐｐｓ⁵⁰９</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
@@ -138,83 +361,79 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const emailEl = document.getElementById("email");
-const fullnameEl = document.getElementById("fullname");
-const roleEl = document.getElementById("role");
-const profilePicEl = document.getElementById("profilePic");
-const goAdminBtn = document.getElementById("goAdminPage");
-
 let currentUser = null;
 
-// ===== Vérifier connexion Google =====
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    location.href = "index.html";
+// ===== Vérification connexion utilisateur =====
+onAuthStateChanged(auth, (user)=>{
+  if(!user){
+    alert("❌ Vous devez être connecté pour accéder au formulaire");
+    window.location.href = "profil.html";
     return;
   }
-
   currentUser = user;
-  emailEl.textContent = user.email;
-  profilePicEl.src = user.photoURL || "https://via.placeholder.com/120";
+  document.getElementById("currentAccount").value = user.displayName || "";
+  document.querySelector('input[type="email"]').value = user.email || "";
+});
 
-  const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
+/* Genre */
+function setGender(el){
+  document.querySelectorAll(".gender-btn").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  document.getElementById("gender").value = el.getAttribute("data-gender");
+}
 
-  if (!snap.exists()) {
-    await setDoc(userRef, {
-      fullname: user.displayName || "",
-      email: user.email,
-      role: "user",
-      photo: user.photoURL || "",
-      createdAt: serverTimestamp(),
-      lastLogin: serverTimestamp()
-    });
+/* Créateur */
+function toggleCreator(){
+  document.getElementById("creatorLinkBox").style.display =
+    document.getElementById("isCreator").checked ? "block" : "none";
+}
+document.addEventListener("DOMContentLoaded", ()=>{ toggleCreator(); });
+
+/* Réseau social */
+function setNetwork(el){
+  document.querySelectorAll(".network-btn").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active");
+  document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
+}
+
+/* Submit => Firestore */
+document.getElementById("apps509Form").addEventListener("submit", async e=>{
+  e.preventDefault();
+  if(!currentUser){
+    alert("❌ Vous devez être connecté pour envoyer le formulaire");
+    return;
   }
-
-  const data = (await getDoc(userRef)).data();
-  fullnameEl.value = data.fullname || "";
-  roleEl.textContent = data.role || "user";
-
-  // Si déjà admin, afficher le bouton admin
-  if (data.role === "admin") {
-    goAdminBtn.style.display = "block";
+  const form = e.target;
+  const data = {
+    uid: currentUser.uid,
+    accountName: form.currentAccount.value,
+    fullName: form.querySelector('input[type="text"]:not(#currentAccount)').value,
+    gender: document.getElementById("gender").value,
+    email: form.querySelector('input[type="email"]').value,
+    phone: form.querySelector('.phone-box input').value,
+    region: document.getElementById("playerRegion").value,
+    level: document.getElementById("playerLevel").value,
+    isCreator: document.getElementById("isCreator").checked,
+    creatorNetwork: document.getElementById("creatorNetworkValue").value,
+    creatorLink: form.querySelector('#creatorLinkBox input[type="url"]').value,
+    message: form.querySelector('textarea').value,
+    timestamp: serverTimestamp()
+  };
+  try{
+    await addDoc(collection(db,"forms"), data);
+    alert("✅ Formulaire envoyé avec succès !");
+    form.reset();
+    toggleCreator();
+  }catch(err){
+    console.error(err);
+    alert("❌ Erreur lors de l'envoi !");
   }
 });
 
-// ===== Sauvegarder profil =====
-document.getElementById("saveProfile").onclick = async () => {
-  if (!currentUser) return;
-  await updateDoc(doc(db, "users", currentUser.uid), {
-    fullname: fullnameEl.value
-  });
-  alert("✅ Profil enregistré");
-};
-
-// ===== Devenir admin =====
-document.getElementById("becomeAdmin").onclick = async () => {
-  const code = document.getElementById("adminCode").value.trim();
-  if (code !== "098326623890") {
-    alert("❌ Code admin incorrect");
-    return;
-  }
-  await updateDoc(doc(db, "users", currentUser.uid), {
-    role: "admin"
-  });
-  roleEl.textContent = "admin";
-  goAdminBtn.style.display = "block";
-  alert("✅ Vous êtes maintenant admin");
-};
-
-// ===== Aller vers admin.html =====
-goAdminBtn.onclick = () => {
-  location.href = "admin.html";
-};
-
-// ===== Déconnexion =====
-document.getElementById("logout").onclick = async () => {
-  await signOut(auth);
-  location.href = "index.html";
-};
+/* Bouton retour profil */
+function goToProfil(){
+  window.location.href = "profil.html";
+}
 </script>
 
 </body>
