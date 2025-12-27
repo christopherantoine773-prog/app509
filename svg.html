@@ -54,7 +54,6 @@ header h1{
   border-radius:15px;
   padding:15px;
   margin-bottom:15px;
-  word-break: break-word;
 }
 .request-card h3{
   margin:0 0 10px 0;
@@ -94,13 +93,13 @@ button{
 </header>
 
 <div class="container profile-box">
-  <img id="userPhoto" src="https://via.placeholder.com/90">
+  <img id="userPhoto" src="">
   <h3 id="userName">—</h3>
   <p id="userEmail">—</p>
 </div>
 
 <div class="container" id="requestsContainer">
-  <!-- demandes -->
+  <!-- Les demandes apparaîtront ici -->
 </div>
 
 <div class="container" style="text-align:center;">
@@ -109,8 +108,8 @@ button{
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -122,14 +121,15 @@ const firebaseConfig = {
   appId: "1:445508086674:web:22d593d940bd328d436f4b"
 };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 const container = document.getElementById("requestsContainer");
 
 auth.onAuthStateChanged(user => {
   if(!user){
-    location.href = "index.html";
+    alert("❌ Veuillez vous connecter.");
+    window.location.href = "index.html";
     return;
   }
 
@@ -138,53 +138,54 @@ auth.onAuthStateChanged(user => {
   document.getElementById("userEmail").textContent = user.email;
   document.getElementById("userName").textContent = user.displayName || "Utilisateur";
 
-  // Requête Firestore pour ses demandes
-  const q = db.collection("forms")
-              .where("userId", "==", user.uid)
-              .orderBy("createdAt", "desc");
+  // Requête Firestore : uniquement ses demandes
+  db.collection("forms")
+    .where("userId","==",user.uid)
+    .orderBy("createdAt","desc")
+    .get()
+    .then(snapshot=>{
+      container.innerHTML = "";
+      if(snapshot.empty){
+        container.innerHTML = "<p>Aucune demande trouvée.</p>";
+        return;
+      }
+      snapshot.forEach(doc=>{
+        const d = doc.data();
+        const statusClass =
+          d.status === "Accepté" ? "accepted" :
+          d.status === "Refusé" ? "refused" : "pending";
 
-  q.onSnapshot(snapshot => {
-    container.innerHTML = "";
-    if(snapshot.empty){
-      container.innerHTML = "<p>Aucune demande trouvée.</p>";
-      return;
-    }
-    snapshot.forEach(doc => {
-      const d = doc.data();
-      const statusClass =
-        d.status === "Accepté" ? "accepted" :
-        d.status === "Refusé" ? "refused" : "pending";
-
-      const card = document.createElement("div");
-      card.className = "request-card";
-      card.innerHTML = `
-        <h3>Demande</h3>
-        <p><strong>Nom:</strong> ${d.fullName || "-"}</p>
-        <p><strong>Email:</strong> ${d.email || "-"}</p>
-        <p><strong>Genre:</strong> ${d.gender || "-"}</p>
-        <p><strong>Téléphone:</strong>
-          ${d.phone ? `<a href="https://wa.me/${d.phone}" target="_blank">${d.phone}</a>` : "-"}
-        </p>
-        <p><strong>Réseau:</strong>
-          ${d.creatorLink ? `<a href="${d.creatorLink}" target="_blank">${d.creatorNetwork}</a>` : "-"}
-        </p>
-        <p><strong>Message:</strong> ${d.message || "-"}</p>
-        <p class="status ${statusClass}">
-          Statut : ${d.status || "En attente"}
-        </p>
-      `;
-      container.appendChild(card);
+        const card = document.createElement("div");
+        card.className = "request-card";
+        card.innerHTML = `
+          <h3>Demande</h3>
+          <p><strong>Email:</strong> ${d.email || "-"}</p>
+          <p><strong>Nom:</strong> ${d.fullName || "-"}</p>
+          <p><strong>Genre:</strong> ${d.gender || "-"}</p>
+          <p><strong>Téléphone:</strong>
+            ${d.phone ? `<a href="https://wa.me/${d.phone}" target="_blank">${d.phone}</a>` : "-"}
+          </p>
+          <p><strong>Réseau:</strong>
+            ${d.creatorLink ? `<a href="${d.creatorLink}" target="_blank">${d.creatorNetwork}</a>` : "-"}
+          </p>
+          <p><strong>Message:</strong> ${d.message || "-"}</p>
+          <p class="status ${statusClass}">
+            Statut : ${d.status || "En attente"}
+          </p>
+        `;
+        container.appendChild(card);
+      });
+    })
+    .catch(err=>{
+      console.error("Erreur Firestore:", err);
+      container.innerHTML = "<p>Erreur lors du chargement des demandes.</p>";
     });
-  }, err => {
-    console.error(err);
-    container.innerHTML = "<p>Erreur lors du chargement des demandes.</p>";
-  });
 });
 
 // Déconnexion
-document.getElementById("logoutBtn").onclick = async () => {
+document.getElementById("logoutBtn").onclick = async ()=>{
   await auth.signOut();
-  location.href = "index.html";
+  window.location.href = "index.html";
 };
 </script>
 
