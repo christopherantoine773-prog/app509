@@ -113,7 +113,7 @@ footer{
   </form>
 
   <hr style="margin:20px 0;">
-  <!-- GOOGLE LOGIN (inchangé) -->
+  <!-- GOOGLE LOGIN -->
   <button id="googleLoginBtn">🔐 Se connecter avec Google</button>
 
 </div>
@@ -127,12 +127,12 @@ import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.
 
 /* 🔥 CONFIG FIREBASE */
 const firebaseConfig = {
-  apiKey: "AIzaSyAm1-53K6VuK7wdwu67pUjLU3t7S_-bwJo",
-  authDomain: "app509-d7bc6.firebaseapp.com",
-  projectId: "app509-d7bc6",
-  storageBucket: "app509-d7bc6.firebasestorage.app",
-  messagingSenderId: "1139351082",
-  appId: "1:1139351082:web:18461a1249b189ef7eed53"
+  apiKey: "AIzaSyBuUof-QAQBzLjB6wrSUGKEBvdZ3j5-TbI",
+  authDomain: "app509-ff54f.firebaseapp.com",
+  projectId: "app509-ff54f",
+  storageBucket: "app509-ff54f.firebasestorage.app",
+  messagingSenderId: "663727026922",
+  appId: "1:663727026922:web:07e66eae137b6fe436dd93"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -159,7 +159,7 @@ loginForm.onsubmit = async (e)=>{
   const password = document.getElementById("loginPassword").value;
   try{
     await signInWithEmailAndPassword(auth,email,password);
-    window.location.href = "profil.html";
+    window.location.href = "profil.html"; // redirection après connexion
   }catch(err){
     alert("⚠️ Email ou mot de passe incorrect !");
   }
@@ -181,13 +181,13 @@ signupForm.onsubmit = async (e)=>{
       createdAt: serverTimestamp(),
       lastLogin: serverTimestamp()
     });
-    window.location.href = "profil.html";
+    window.location.href = "profil.html"; // redirection après inscription
   }catch(err){
     alert("⚠️ Erreur : "+err.message);
   }
 };
 
-/* GOOGLE LOGIN (inchangé) */
+/* GOOGLE LOGIN */
 document.getElementById("googleLoginBtn").onclick = async ()=>{
   try{
     const result = await signInWithPopup(auth, provider);
@@ -206,13 +206,14 @@ document.getElementById("googleLoginBtn").onclick = async ()=>{
     }else{
       await setDoc(userRef,{lastLogin:serverTimestamp()},{merge:true});
     }
+    // sauvegarder session
     sessionStorage.setItem("dpstore_user",JSON.stringify({
       fullname:user.displayName,
       email:user.email,
       role:snap.exists()?snap.data().role:"user",
       photo:user.photoURL
     }));
-    window.location.href = "profil.html";
+    window.location.href = "profil.html"; // redirection après Google
   }catch(e){
     alert("❌ Erreur connexion Google : "+e.message);
   }
