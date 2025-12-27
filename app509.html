@@ -399,6 +399,7 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
   if(!currentUser) return;
   const form = e.target;
   const data = {
+    userId: currentUser.uid,                      // 🔥 Pour svg.html et admin.html
     accountName: form.currentAccount.value,
     fullName: form.querySelector('input[type="text"]:not(#currentAccount)').value,
     gender: document.getElementById("gender").value,
@@ -411,7 +412,8 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
     creatorLink: form.querySelector('#creatorLinkBox input[type="url"]').value,
     message: form.querySelector('textarea').value,
     profilePhoto: document.getElementById("profilePhoto").src,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    status: "En attente",                         // 🔥 Nouveau champ statut
+    createdAt: firebase.firestore.FieldValue.serverTimestamp() // 🔥 Pour tri par date
   };
   try{
     await db.collection("forms").add(data);
