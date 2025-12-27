@@ -293,6 +293,18 @@ footer{
       <div class="network-btn" data-network="facebook" onclick="setNetwork(this)">
         <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png" width="20"> Facebook
       </div>
+      <div class="network-btn" data-network="twitter" onclick="setNetwork(this)">
+        <img src="https://upload.wikimedia.org/wikipedia/fr/c/c8/Twitter_Bird.svg" width="20"> Twitter
+      </div>
+      <div class="network-btn" data-network="snapchat" onclick="setNetwork(this)">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/snapchat.svg" width="20"> Snapchat
+      </div>
+      <div class="network-btn" data-network="linkedin" onclick="setNetwork(this)">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" width="20"> LinkedIn
+      </div>
+      <div class="network-btn" data-network="discord" onclick="setNetwork(this)">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" width="20"> Discord
+      </div>
     </div>
     <input type="hidden" id="creatorNetworkValue" value="tiktok">
     <label>Lien du profil</label>
@@ -337,7 +349,6 @@ const db = getFirestore(app);
 
 let currentUser = null;
 
-// Vérifier connexion
 onAuthStateChanged(auth, async user => {
   if(!user){
     window.location.href = "index.html";
@@ -405,4 +416,21 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
   };
   try{
     await addDoc(collection(db, "forms"), data);
-    alert("✅ Formulaire envoyé automatiquement
+    alert("✅ Formulaire envoyé automatiquement dans Firestore !");
+    form.reset();
+    toggleCreator();
+  }catch(err){
+    console.error(err);
+    alert("❌ Erreur lors de l'envoi !");
+  }
+});
+
+document.getElementById("profilBtn").addEventListener("click", ()=>{
+  window.location.href = "profil.html";
+});
+
+document.addEventListener("DOMContentLoaded", ()=>{ toggleCreator(); });
+</script>
+
+</body>
+</html>
