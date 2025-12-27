@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ａｐｐｓ⁵⁰９ | Vos demandes</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#000,#2c2c2c);
+  color:#fff;
+}
+header{
+  background:rgba(0,0,0,0.65);
+  padding:16px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.12);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+header h1{
+  margin:0;
+  font-size:1.6rem;
+  line-height:1;
+  background:linear-gradient(90deg,#fff,#aaa);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.container{
+  max-width:440px;
+  margin:30px auto;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:18px;
+  padding:22px;
+}
+.request-card{
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:12px;
+  background:rgba(0,0,0,0.35);
+}
+.request-card img{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  border:2px solid #00aaff;
+  object-fit:cover;
+  display:block;
+  margin:0 auto 8px auto;
+}
+.request-card p{
+  margin:4px 0;
+  font-size:0.85rem;
+  word-break: break-word;
+}
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:12px;
+  background:#28a745;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+button:hover{
+  background:#1e7e34;
+}
+footer{
+  text-align:center;
+  margin:25px 0;
+  font-size:0.85rem;
+  color:#aaa;
+}
+.empty{
+  text-align:center;
+  color:#aaa;
+  margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+<header>
+  <h1>Vos demandes</h1>
+</header>
+
+<div class="container" id="requestsContainer">
+  <p class="empty">Chargement des demandes...</p>
+</div>
+
+<button onclick="window.location.href='app509.html'">⬅️ Retour au formulaire</button>
+
+<footer>© 2025 — Ａｐｐｓ⁵⁰９</footer>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
+  authDomain: "app509cloud.firebaseapp.com",
+  projectId: "app509cloud",
+  storageBucket: "app509cloud.firebasestorage.app",
+  messagingSenderId: "445508086674",
+  appId: "1:445508086674:web:22d593d940bd328d436f4b"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+const container = document.getElementById("requestsContainer");
+
+auth.onAuthStateChanged(async user => {
+  if(!user){
+    alert("❌ Veuillez vous connecter.");
+    window.location.href = "index.html";
+    return;
+  }
+
+  // Récupère uniquement les demandes de l'utilisateur connecté
+  const querySnapshot = await db.collection("forms")
+    .where("email", "==", user.email)
+    .orderBy("timestamp", "desc")
+    .get();
+
+  container.innerHTML = "";
+
+  if(querySnapshot.empty){
+    container.innerHTML = '<p class="empty">Aucune demande pour le moment.</p>';
+    return;
+  }
+
+  querySnapshot.forEach(doc => {
+    const data = doc.data();
+    const card = document.createElement("div");
+    card.className = "request-card";
+    card.innerHTML = `
+      <img src="${data.profilePhoto || 'https://via.placeholder.com/60'}" alt="Photo de profil">
+      <p><strong>Compte :</strong> ${data.accountName || '-'}</p>
+      <p><strong>Nom complet :</strong> ${data.fullName || '-'}</p>
+      <p><strong>Genre :</strong> ${data.gender || '-'}</p>
+      <p><strong>Email :</strong> ${data.email || '-'}</p>
+      <p><strong>Téléphone :</strong> ${data.phone || '-'}</p>
+      <p><strong>Région :</strong> ${data.region || '-'}</p>
+      <p><strong>Niveau :</strong> ${data.level || '-'}</p>
+      <p><strong>Créateur :</strong> ${data.isCreator ? 'Oui' : 'Non'}</p>
+      <p><strong>Réseau :</strong> ${data.creatorNetwork || '-'}</p>
+      <p><strong>Lien :</strong> ${data.creatorLink || '-'}</p>
+      <p><strong>Message :</strong> ${data.message || '-'}</p>
+      <p><strong>Envoyé le :</strong> ${data.timestamp ? data.timestamp.toDate().toLocaleString() : '-'}</p>
+    `;
+    container.appendChild(card);
+  });
+});
+</script>
+
+</body>
+</html>
