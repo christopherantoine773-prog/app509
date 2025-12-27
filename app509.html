@@ -338,7 +338,7 @@ footer{
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
 <script>
-// Firebase config
+// Config Firebase
 const firebaseConfig = {
   apiKey: "VOTRE_API_KEY",
   authDomain: "VOTRE_PROJECT.firebaseapp.com",
@@ -351,62 +351,52 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-// Vérifie connexion utilisateur
+// Vérifie connexion utilisateur et préremplit le formulaire
 auth.onAuthStateChanged(async user => {
   if(!user){
     alert("❌ Veuillez vous connecter pour remplir le formulaire.");
-    window.location.href = "connexion.html";
+    window.location.href = "profil.html";
     return;
   }
 
-  // Charger données utilisateur pour préremplir le formulaire si besoin
+  // Charger données depuis Firestore
   const docRef = db.collection("users").doc(user.uid);
   const docSnap = await docRef.get();
   if(docSnap.exists){
     const data = docSnap.data();
     document.getElementById("currentAccount").value = data.username || "";
+    document.querySelector('input[type="text"]:not(#currentAccount)').value = data.fullName || "";
     document.getElementById("isCreator").checked = data.isCreator || false;
-    toggleCreator(); // force affichage réseau
+    toggleCreator();
     if(data.creatorNetwork){
-      setNetwork(document.querySelector(`.network-btn[data-network="${data.creatorNetwork}"]`));
+      const networkBtn = document.querySelector(`.network-btn[data-network="${data.creatorNetwork}"]`);
+      if(networkBtn) setNetwork(networkBtn);
     }
-    const fullnameInput = document.querySelector('input[type="text"]:not(#currentAccount)');
-    if(fullnameInput) fullnameInput.value = data.fullName || "";
   }
 });
 
-/* Nom du compte auto (modifiable) */
-let currentUserData = JSON.parse(sessionStorage.getItem("dpstore_user") || "{}");
-if(currentUserData.username){
-  document.getElementById("currentAccount").value = currentUserData.username;
-}
-
-/* Genre */
+// Genre
 function setGender(el){
   document.querySelectorAll(".gender-btn").forEach(b => b.classList.remove("active"));
   el.classList.add("active");
   document.getElementById("gender").value = el.getAttribute("data-gender");
 }
 
-/* Créateur */
+// Afficher / cacher créateur
 function toggleCreator(){
-  const creatorCheckbox = document.getElementById("isCreator");
   document.getElementById("creatorLinkBox").style.display =
-    creatorCheckbox.checked ? "block" : "none";
+    document.getElementById("isCreator").checked ? "block" : "none";
 }
 
-/* Affiche le bon état au chargement */
-document.addEventListener("DOMContentLoaded", ()=>{ toggleCreator(); });
-
-/* Réseau social avec icône */
+// Réseau social
 function setNetwork(el){
   document.querySelectorAll(".network-btn").forEach(b=>b.classList.remove("active"));
   el.classList.add("active");
   document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
 }
 
-/* Submit => envoie automatique Firestore */
-document.getElementById("apps509Form").addEventListener("submit",async e=>{
+// Soumission du formulaire
+document.getElementById("apps509Form").addEventListener("submit", async e=>{
   e.preventDefault();
   const form = e.target;
   const data = {
@@ -434,10 +424,13 @@ document.getElementById("apps509Form").addEventListener("submit",async e=>{
   }
 });
 
-/* Bouton retour profil */
+// Retour profil
 function goToProfil(){
   window.location.href = "profil.html";
 }
+
+// Affiche créateur au chargement si coché
+document.addEventListener("DOMContentLoaded", ()=>{ toggleCreator(); });
 </script>
 
 </body>
