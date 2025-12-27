@@ -145,17 +145,17 @@ auth.onAuthStateChanged(user => {
   document.getElementById("userEmail").textContent = user.email;
   document.getElementById("userName").textContent = user.displayName || "Utilisateur";
 
-  // Requête Firestore : uniquement ses demandes
+  // Écoute en temps réel des demandes de cet utilisateur
   db.collection("forms")
     .where("userId","==",user.uid)
     .orderBy("createdAt","desc")
-    .get()
-    .then(snapshot=>{
+    .onSnapshot(snapshot=>{
       container.innerHTML = "";
       if(snapshot.empty){
         container.innerHTML = "<p>Aucune demande trouvée.</p>";
         return;
       }
+
       snapshot.forEach(doc=>{
         const d = doc.data();
         const statusClass =
@@ -179,11 +179,11 @@ auth.onAuthStateChanged(user => {
           <p class="status ${statusClass}">
             Statut : ${d.status || "En attente"}
           </p>
+          <p><strong>Soumis le:</strong> ${d.createdAt?.toDate?.()?.toLocaleString() || "-"}</p>
         `;
         container.appendChild(card);
       });
-    })
-    .catch(err=>{
+    }, err=>{
       console.error("Erreur Firestore:", err);
       container.innerHTML = "<p>Erreur lors du chargement des demandes.</p>";
     });
