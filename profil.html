@@ -33,6 +33,7 @@ header h1{
 .profile-box{
   text-align:center;
   margin-bottom:25px;
+  display:none; /* Profil caché tant que notice non acceptée */
 }
 .profile-box img{
   width:90px;
@@ -90,18 +91,20 @@ button{
 }
 .goApp:hover{ background:#3399ff; }
 
-/* Modal Notice */
+/* Style modal notice */
 #noticeModal{
-  display:none;
+  display:flex;
   position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
   background:rgba(0,0,0,0.85);
   justify-content:center;
   align-items:center;
   z-index:1000;
 }
-#noticeContent{
+#noticeModal .modal-content{
   background:#fff;
   color:#000;
   padding:20px;
@@ -111,23 +114,23 @@ button{
   overflow-y:auto;
   text-align:left;
 }
-#noticeContent h3{
+#noticeModal h3{
   text-align:center;
   margin-bottom:15px;
 }
-#noticeContent p{
-  margin:8px 0;
-}
-#noticeContent button{
+#noticeModal button{
   display:block;
   margin:15px auto 0 auto;
-  padding:10px 20px;
-  border:none;
-  border-radius:8px;
+  padding:12px 25px;
   background:#00aa00;
   color:white;
-  cursor:pointer;
   font-weight:bold;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+#noticeModal button:hover{
+  background:#33cc33;
 }
 </style>
 </head>
@@ -138,7 +141,27 @@ button{
   <h1>Mes demandes — Ａｐｐｓ⁵⁰９</h1>
 </header>
 
-<div class="container profile-box">
+<!-- Notice Modal -->
+<div id="noticeModal">
+  <div class="modal-content">
+    <h3>Clan ‘’Ａｐｐｓ⁵⁰９ ‘’ N/A</h3>
+    <p><strong>Update règles</strong></p>
+    <p>C R E O L E   H A I T I A N 🇭🇹</p>
+    <p><strong>Règ 1:</strong> Respè, Disiplin, Responsablite</p>
+    <p><strong>Règ 2:</strong> Se pou w aktif ✅</p>
+    <p><strong>Règ 3:</strong> A koz de lekol lan nou diminuer nan pwen yo. Minimòm 5000 pwen pa semèn ni pou fille ni pou gason. Tout moun supoze fe 5000 pwen an pandan 7 jours sinon map metew deyo. Wap jwenn kado selman pou Guerre guild. Moun ki premye an 🥇 1118 💎 supoze fe 200 pwen. Wap selman banm ID ou puis tann mwen voyel baw.</p>
+    <p><strong>Règ 4:</strong> Move konpòtman ap lakòz ou deyo.</p>
+    <p><strong>Règ 5:</strong> Ou dwe fòme yon bon ekip pou w jwe.</p>
+    <p><strong>Règ 6:</strong> Guerre guid chak Mercredi, Samedi, Dimanch 7è pou 11è nan aswe. Tout moun dwe jwe svp. Et pandan guerre guid lan ou pa supoze jwe lot bagay ke li.</p>
+    <p><strong>Règ 7:</strong> Ａｐｐｓ⁵⁰９ guid lan dwe rete nan nivo 700k pwen chak semèn. Epi rete si nou vle metel nan Top Rejyonal la 🫰🏽</p>
+    <p><strong>Règ 8:</strong> Pa pataje kontni oswa anyen ki pa pou Free Fire.</p>
+    <p><strong>Règ 9:</strong> Ou pa dwe use hack ni jwe ak Hacker. Pa mande dyaman isit la. Si yon moun mande m, map metew deyo nan.</p>
+    <p><strong>Règ 10:</strong> Kvk, Or pvp, Vs lot Clan Vendredi, Samedi, Dimanche avant gè clan an. Fow gen gomme pou w change nomw sinon ou pap ka antre.</p>
+    <button id="acceptNoticeBtn">Accepte et Continue (Savage Divah)</button>
+  </div>
+</div>
+
+<div class="container profile-box" id="profileBox">
   <img id="userPhoto" src="">
   <h3 id="userName">—</h3>
   <p id="userEmail">—</p>
@@ -152,26 +175,6 @@ button{
   <button class="back" onclick="location.href='profil.html'">⬅️ Retour Profil</button>
   <button class="goApp" onclick="location.href='app509.html'">🌐 Aller à App509</button>
   <button class="logout" id="logoutBtn">Déconnexion</button>
-</div>
-
-<!-- Notice Modal -->
-<div id="noticeModal">
-  <div id="noticeContent">
-    <h3>Clan ‘’Ａｐｐｓ⁵⁰９ ‘’ N/A</h3>
-    <p><strong>Update règles</strong></p>
-    <p>C R E O L E   H A I T I A N 🇭🇹</p>
-    <p><strong>Règ 1:</strong> Respè, Disiplin, Responsablite</p>
-    <p><strong>Règ 2:</strong> Se pou w aktif ✅</p>
-    <p><strong>Règ 3:</strong> Minimòm 5000 pwen pa semèn ni pou fille ni pou gason. Tout moun supoze fe 5000 pwen an pandan 7 jours sinon map metew deyo. Wap jwenn kado selman pou Guerre guild. Moun ki premye an 🥇 1118 💎 supoze fe 200 pwen. Wap selman banm ID ou puis tann mwen voyel baw.</p>
-    <p><strong>Règ 4:</strong> Move konpòtman ap lakòz ou deyo.</p>
-    <p><strong>Règ 5:</strong> Ou dwe fòme yon bon ekip pou w jwe.</p>
-    <p><strong>Règ 6:</strong> Guerre guid chak Mercredi, Samedi, Dimanch 7è pou 11è nan aswe. Tout moun dwe jwe svp. Et pandan guerre guid lan ou pa supoze jwe lot bagay ke li.</p>
-    <p><strong>Règ 7:</strong> Ａｐｐｓ⁵⁰９ guid lan dwe rete nan nivo 700k pwen chak semèn. Epi rete si nou vle metel nan Top Rejyonal la 🫰🏽</p>
-    <p><strong>Règ 8:</strong> Pa pataje kontni oswa anyen ki pa pou Free Fire.</p>
-    <p><strong>Règ 9:</strong> Ou pa dwe use hack ni jwe ak Hacker. Pa mande dyaman isit la. Si yon moun mande m, map metew deyo nan.</p>
-    <p><strong>Règ 10:</strong> Kvk, Or pvp, Vs lot Clan Vendredi, Samedi, Dimanche avant gè clan an. Fow gen gomme pou w change nomw sinon ou pap ka antre.</p>
-    <button id="acceptNoticeBtn">Accepte et Continue (Savage Divah)</button>
-  </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -192,8 +195,10 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 const container = document.getElementById("requestsContainer");
+const profileBox = document.getElementById("profileBox");
+const noticeModal = document.getElementById("noticeModal");
+const acceptNoticeBtn = document.getElementById("acceptNoticeBtn");
 
-// Affichage profil et demandes
 auth.onAuthStateChanged(user => {
   if(!user){
     alert("❌ Veuillez vous connecter.");
@@ -201,67 +206,65 @@ auth.onAuthStateChanged(user => {
     return;
   }
 
-  // Affichage profil
-  document.getElementById("userPhoto").src = user.photoURL || "https://via.placeholder.com/90";
-  document.getElementById("userEmail").textContent = user.email;
-  document.getElementById("userName").textContent = user.displayName || "Utilisateur";
+  // ⚡ Attendre que l'utilisateur accepte la notice avant d'afficher le profil
+  acceptNoticeBtn.onclick = () => {
+    noticeModal.style.display = 'none';
+    profileBox.style.display = 'block';
 
-  // ⚡ Afficher le modal notice automatiquement
-  document.getElementById('noticeModal').style.display = 'flex';
+    // Affichage profil
+    document.getElementById("userPhoto").src = user.photoURL || "https://via.placeholder.com/90";
+    document.getElementById("userEmail").textContent = user.email;
+    document.getElementById("userName").textContent = user.displayName || "Utilisateur";
 
-  // Requête Firestore : uniquement ses demandes
-  db.collection("forms")
-    .where("userId","==",user.uid)
-    .orderBy("createdAt","desc")
-    .get()
-    .then(snapshot=>{
-      container.innerHTML = "";
-      if(snapshot.empty){
-        container.innerHTML = "<p>Aucune demande trouvée.</p>";
-        return;
-      }
-      snapshot.forEach(doc=>{
-        const d = doc.data();
-        const statusClass =
-          d.status === "Accepté" ? "accepted" :
-          d.status === "Refusé" ? "refused" : "pending";
+    // Charger les demandes
+    db.collection("forms")
+      .where("userId","==",user.uid)
+      .orderBy("createdAt","desc")
+      .get()
+      .then(snapshot=>{
+        container.innerHTML = "";
+        if(snapshot.empty){
+          container.innerHTML = "<p>Aucune demande trouvée.</p>";
+          return;
+        }
+        snapshot.forEach(doc=>{
+          const d = doc.data();
+          const statusClass =
+            d.status === "Accepté" ? "accepted" :
+            d.status === "Refusé" ? "refused" : "pending";
 
-        const card = document.createElement("div");
-        card.className = "request-card";
-        card.innerHTML = `
-          <h3>Demande</h3>
-          <p><strong>Email:</strong> ${d.email || "-"}</p>
-          <p><strong>Nom:</strong> ${d.fullName || "-"}</p>
-          <p><strong>Genre:</strong> ${d.gender || "-"}</p>
-          <p><strong>Téléphone:</strong>
-            ${d.phone ? `<a href="https://wa.me/${d.phone}" target="_blank">${d.phone}</a>` : "-"}
-          </p>
-          <p><strong>Réseau:</strong>
-            ${d.creatorLink ? `<a href="${d.creatorLink}" target="_blank">${d.creatorNetwork}</a>` : "-"}
-          </p>
-          <p><strong>Message:</strong> ${d.message || "-"}</p>
-          <p class="status ${statusClass}">
-            Statut : ${d.status || "En attente"}
-          </p>
-        `;
-        container.appendChild(card);
+          const card = document.createElement("div");
+          card.className = "request-card";
+          card.innerHTML = `
+            <h3>Demande</h3>
+            <p><strong>Email:</strong> ${d.email || "-"}</p>
+            <p><strong>Nom:</strong> ${d.fullName || "-"}</p>
+            <p><strong>Genre:</strong> ${d.gender || "-"}</p>
+            <p><strong>Téléphone:</strong>
+              ${d.phone ? `<a href="https://wa.me/${d.phone}" target="_blank">${d.phone}</a>` : "-"}
+            </p>
+            <p><strong>Réseau:</strong>
+              ${d.creatorLink ? `<a href="${d.creatorLink}" target="_blank">${d.creatorNetwork}</a>` : "-"}
+            </p>
+            <p><strong>Message:</strong> ${d.message || "-"}</p>
+            <p class="status ${statusClass}">
+              Statut : ${d.status || "En attente"}
+            </p>
+          `;
+          container.appendChild(card);
+        });
+      })
+      .catch(err=>{
+        console.error("Erreur Firestore:", err);
+        container.innerHTML = "<p>Erreur lors du chargement des demandes.</p>";
       });
-    })
-    .catch(err=>{
-      console.error("Erreur Firestore:", err);
-      container.innerHTML = "<p>Erreur lors du chargement des demandes.</p>";
-    });
+  };
 });
 
 // Déconnexion
 document.getElementById("logoutBtn").onclick = async ()=>{
   await auth.signOut();
   window.location.href = "index.html";
-};
-
-// Bouton accepter notice
-document.getElementById("acceptNoticeBtn").onclick = ()=>{
-  document.getElementById('noticeModal').style.display='none';
 };
 </script>
 
