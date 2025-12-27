@@ -12,6 +12,8 @@ body{
   background:linear-gradient(135deg,#000,#2c2c2c);
   color:#fff;
 }
+
+/* ===== HEADER ===== */
 header{
   background:rgba(0,0,0,0.65);
   padding:16px 20px;
@@ -28,6 +30,8 @@ header h1{
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
+
+/* ===== CONTAINER ===== */
 .container{
   max-width:440px;
   margin:30px auto;
@@ -36,6 +40,8 @@ header h1{
   border-radius:18px;
   padding:22px;
 }
+
+/* ===== SECTIONS ===== */
 .form-section{
   margin-bottom:20px;
 }
@@ -46,6 +52,8 @@ header h1{
   padding-left:10px;
   border-left:3px solid #00aaff;
 }
+
+/* ===== INPUTS ===== */
 label{
   font-size:0.85rem;
   color:#ccc;
@@ -62,6 +70,8 @@ input, select, textarea{
   outline:none;
   box-sizing:border-box;
 }
+
+/* ===== GENRE ===== */
 .gender-box{
   display:flex;
   gap:10px;
@@ -82,12 +92,16 @@ input, select, textarea{
   color:black;
   box-shadow:0 0 8px #00aaffaa;
 }
+
+/* ===== PHONE ===== */
 .phone-box{
   display:flex;
   gap:10px;
 }
 .phone-box select{ width:35%; }
 .phone-box input{ width:65%; }
+
+/* ===== CHECKBOX ===== */
 .status{
   display:flex;
   align-items:center;
@@ -99,12 +113,16 @@ input, select, textarea{
   font-size:0.85rem;
   color:#ccc;
 }
+
+/* Alignement spécifique pour Compte actif */
 .status.compact{
   display:flex;
   align-items:center;
   justify-content:flex-start;
   gap:8px;
 }
+
+/* ===== CRÉATEUR ===== */
 .creator-section{
   margin-top:10px;
 }
@@ -121,6 +139,8 @@ input, select, textarea{
   color:white;
   margin-bottom:10px;
 }
+
+/* ===== RÉSEAU SOCIAL AVEC ICÔNES ===== */
 .network-btns{
   display:flex;
   flex-wrap:wrap;
@@ -148,6 +168,8 @@ input, select, textarea{
 .network-btn img{
   display:block;
 }
+
+/* ===== BUTTON ===== */
 button{
   width:100%;
   padding:12px;
@@ -163,6 +185,8 @@ button:hover{
   background:#00aaff;
   color:black;
 }
+
+/* ===== BOUTON PROFIL ===== */
 #profilBtn{
   width:100%;
   padding:12px;
@@ -178,6 +202,8 @@ button:hover{
 #profilBtn:hover{
   background:#1e7e34;
 }
+
+/* ===== FOOTER ===== */
 footer{
   text-align:center;
   margin:25px 0;
@@ -188,24 +214,34 @@ footer{
 </head>
 
 <body>
-<header><h1>Ａｐｐｓ⁵⁰９</h1></header>
+
+<header>
+  <h1>Ａｐｐｓ⁵⁰９</h1>
+</header>
+
 <div class="container">
 <form id="apps509Form">
 
+<!-- ===== COMPTE ===== -->
 <div class="form-section">
   <div class="form-title">Compte</div>
+
   <label>Nom du compte actuel</label>
   <input type="text" id="currentAccount">
+
   <div class="status compact">
     <input type="checkbox" checked id="accountActive">
     <label for="accountActive">Compte actif</label>
   </div>
 </div>
 
+<!-- ===== IDENTITÉ ===== -->
 <div class="form-section">
   <div class="form-title">Identité</div>
+
   <label>Nom complet</label>
   <input type="text" required placeholder="Nom et prénom">
+
   <label>Genre</label>
   <div class="gender-box">
     <div class="gender-btn active" data-gender="♂" onclick="setGender(this)">♂</div>
@@ -214,10 +250,13 @@ footer{
   <input type="hidden" id="gender" value="♂">
 </div>
 
+<!-- ===== CONTACT ===== -->
 <div class="form-section">
   <div class="form-title">Contact</div>
+
   <label>Email</label>
   <input type="email" required placeholder="email@example.com">
+
   <label>Téléphone</label>
   <div class="phone-box">
     <select>
@@ -230,10 +269,13 @@ footer{
   </div>
 </div>
 
+<!-- ===== JEU ===== -->
 <div class="form-section">
   <div class="form-title">Jeu</div>
+
   <label>UID du joueur</label>
   <input type="text" placeholder="UID / ID du joueur">
+
   <label>Région</label>
   <select id="playerRegion">
     <option value="amerique-nord">Amérique du Nord</option>
@@ -241,18 +283,26 @@ footer{
     <option value="europe">Europe</option>
     <option value="mena">MENA</option>
   </select>
+
   <label>Niveau du compte</label>
   <select id="playerLevel">
-    <script>for(let i=1;i<=120;i++){document.write(`<option value="${i}">${i}</option>`);}</script>
+    <script>
+      for(let i=1;i<=120;i++){
+        document.write(`<option value="${i}">${i}</option>`);
+      }
+    </script>
   </select>
 </div>
 
+<!-- ===== CRÉATEUR ===== -->
 <div class="form-section creator-section">
   <div class="form-title">Créateur de contenu</div>
+
   <div class="status">
     <input type="checkbox" id="isCreator" onchange="toggleCreator()">
     <label for="isCreator">Activer</label>
   </div>
+
   <div id="creatorLinkBox">
     <label>Réseau social</label>
     <div class="network-btns">
@@ -273,27 +323,32 @@ footer{
       </div>
     </div>
     <input type="hidden" id="creatorNetworkValue" value="tiktok">
+
     <label>Lien du profil</label>
     <input type="url" id="creatorLink" placeholder="https://">
   </div>
 </div>
 
+<!-- ===== MESSAGE ===== -->
 <div class="form-section">
   <div class="form-title">Message</div>
   <textarea rows="4" placeholder="Informations supplémentaires"></textarea>
 </div>
 
 <button type="submit">Envoyer</button>
+
+<!-- ===== BOUTON RETOUR PROFIL ===== -->
 <button type="button" id="profilBtn" onclick="goToProfil()">Retour vers Profil</button>
 
 </form>
 </div>
+
 <footer>© 2025 — Ａｐｐｓ⁵⁰９</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, getDocs, query, where, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
@@ -310,7 +365,8 @@ const db = getFirestore(app);
 
 let currentUser = null;
 
-onAuthStateChanged(auth, (user)=>{
+// ===== Vérifie connexion utilisateur =====
+onAuthStateChanged(auth, async (user)=>{
   if(!user){
     window.location.href = "index.html";
     return;
@@ -318,12 +374,31 @@ onAuthStateChanged(auth, (user)=>{
   currentUser = user;
   document.getElementById("currentAccount").value = user.displayName || "";
   document.querySelector('input[type="email"]').value = user.email || "";
+
+  // ===== Pré-remplir formulaire si existant =====
+  const q = query(collection(db,"forms"), where("uid","==",user.uid));
+  const snap = await getDocs(q);
+  if(!snap.empty){
+    const data = snap.docs[0].data();
+    document.querySelector('input[type="text"]:not(#currentAccount)').value = data.fullName || "";
+    document.getElementById("gender").value = data.gender || "♂";
+    setGender(document.querySelector(`.gender-btn[data-gender="${data.gender || '♂'}"]`));
+    document.querySelector('input[type="tel"]').value = data.phone || "";
+    document.getElementById("playerRegion").value = data.region || "amerique-nord";
+    document.getElementById("playerLevel").value = data.level || 1;
+    document.getElementById("isCreator").checked = data.isCreator || false;
+    toggleCreator();
+    document.getElementById("creatorNetworkValue").value = data.creatorNetwork || "tiktok";
+    setNetwork(document.querySelector(`.network-btn[data-network="${data.creatorNetwork || 'tiktok'}"]`));
+    document.getElementById("creatorLink").value = data.creatorLink || "";
+    document.querySelector('textarea').value = data.message || "";
+  }
 });
 
 function setGender(el){
   document.querySelectorAll(".gender-btn").forEach(b => b.classList.remove("active"));
-  el.classList.add("active");
-  document.getElementById("gender").value = el.getAttribute("data-gender");
+  if(el) el.classList.add("active");
+  document.getElementById("gender").value = el?.getAttribute("data-gender") || "♂";
 }
 
 function toggleCreator(){
@@ -334,14 +409,18 @@ document.addEventListener("DOMContentLoaded", ()=>{ toggleCreator(); });
 
 function setNetwork(el){
   document.querySelectorAll(".network-btn").forEach(b=>b.classList.remove("active"));
-  el.classList.add("active");
-  document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
+  if(el) el.classList.add("active");
+  document.getElementById("creatorNetworkValue").value = el?.getAttribute("data-network") || "tiktok";
 }
 
-document.getElementById("apps509Form").addEventListener("submit", async e=>{
+document.getElementById("apps509Form").addEventListener("submit",async e=>{
   e.preventDefault();
   if(!currentUser){ alert("❌ Vous devez être connecté."); return; }
   const form = e.target;
+
+  // Vérifier si un formulaire existe déjà
+  const q = query(collection(db,"forms"), where("uid","==",currentUser.uid));
+  const snap = await getDocs(q);
   const data = {
     uid: currentUser.uid,
     accountName: form.currentAccount.value,
@@ -357,10 +436,16 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
     message: form.querySelector('textarea').value,
     timestamp: serverTimestamp()
   };
+
   try{
-    await addDoc(collection(db,"forms"), data);
-    alert("✅ Formulaire envoyé dans Firestore !");
-    form.reset();
+    if(!snap.empty){
+      // Mise à jour du premier formulaire existant
+      await updateDoc(doc(db,"forms",snap.docs[0].id), data);
+      alert("✅ Formulaire mis à jour avec succès !");
+    }else{
+      await addDoc(collection(db,"forms"), data);
+      alert("✅ Formulaire envoyé automatiquement dans Firestore !");
+    }
     toggleCreator();
   }catch(err){
     console.error(err);
@@ -372,5 +457,6 @@ function goToProfil(){
   window.location.href = "profil.html";
 }
 </script>
+
 </body>
 </html>
