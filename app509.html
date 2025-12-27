@@ -277,7 +277,7 @@ footer{
   </select>
 </div>
 
-<!-- ===== CRÉATEUR ===== -->
+<!-- ===== CRÉATEUR DE CONTENU ===== -->
 <div class="form-section creator-section">
   <div class="form-title">Créateur de contenu</div>
 
@@ -308,14 +308,13 @@ footer{
     <input type="hidden" id="creatorNetworkValue" value="tiktok">
 
     <label>Lien du profil</label>
-    <input type="url" placeholder="https://">
+    <input type="url" id="creatorLink" placeholder="https://">
   </div>
 </div>
 
 <!-- ===== MESSAGE ===== -->
 <div class="form-section">
   <div class="form-title">Message</div>
-
   <textarea rows="4" placeholder="Informations supplémentaires"></textarea>
 </div>
 
@@ -400,7 +399,7 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
     level: document.getElementById("playerLevel").value,
     isCreator: document.getElementById("isCreator").checked,
     creatorNetwork: document.getElementById("creatorNetworkValue").value,
-    creatorLink: form.querySelector('#creatorLinkBox input[type="url"]').value,
+    creatorLink: document.getElementById("creatorLink").value,
     message: form.querySelector('textarea').value,
     timestamp: serverTimestamp()
   };
