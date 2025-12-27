@@ -53,11 +53,22 @@ header h1{
   border:1px solid rgba(0,170,255,0.25);
   border-radius:15px;
   padding:15px;
-  margin-bottom:15px;
+  margin-bottom:10px;
+  cursor:pointer;
+  transition:0.2s;
+}
+.request-card:hover{
+  background:rgba(0,170,255,0.1);
 }
 .request-card h3{
-  margin:0 0 10px 0;
+  margin:0 0 5px 0;
   color:#00aaff;
+}
+.request-details{
+  display:none;
+  margin-top:10px;
+  border-top:1px solid rgba(255,255,255,0.2);
+  padding-top:10px;
 }
 .status{
   font-weight:bold;
@@ -140,7 +151,7 @@ auth.onAuthStateChanged(user => {
   // Récupérer uniquement les demandes de l'utilisateur
   db.collection("forms")
     .where("userId","==",user.uid)
-    .orderBy("createdAt","desc")
+    .orderBy("timestamp","desc")
     .onSnapshot(snap=>{
       container.innerHTML = "";
       if(snap.empty){
@@ -155,20 +166,29 @@ auth.onAuthStateChanged(user => {
 
         const card = document.createElement("div");
         card.className = "request-card";
+
         card.innerHTML = `
-          <h3>Demande</h3>
-          <p><strong>Email:</strong> ${d.email || "-"}</p>
-          <p><strong>Nom:</strong> ${d.fullName || "-"}</p>
-          <p><strong>Genre:</strong> ${d.gender || "-"}</p>
-          <p><strong>Téléphone:</strong>
-            ${d.phone ? `<a href="https://wa.me/${d.phone}" target="_blank">${d.phone}</a>` : "-"}
-          </p>
-          <p><strong>Réseau:</strong>
-            ${d.creatorLink ? `<a href="${d.creatorLink}" target="_blank">${d.creatorNetwork}</a>` : "-"}
-          </p>
-          <p><strong>Message:</strong> ${d.message || "-"}</p>
-          <p class="status ${statusClass}">Statut : ${d.status || "En attente"}</p>
+          <h3>${d.fullName || d.email || "Demande"} — 
+            <span class="status ${statusClass}">${d.status || "En attente"}</span>
+          </h3>
+          <div class="request-details">
+            <p><strong>Email:</strong> ${d.email || "-"}</p>
+            <p><strong>Genre:</strong> ${d.gender || "-"}</p>
+            <p><strong>Téléphone:</strong>
+              ${d.phone ? `<a href="https://wa.me/${d.phone}" target="_blank">${d.phone}</a>` : "-"}
+            </p>
+            <p><strong>Réseau:</strong>
+              ${d.creatorLink ? `<a href="${d.creatorLink}" target="_blank">${d.creatorNetwork}</a>` : "-"}
+            </p>
+            <p><strong>Message:</strong> ${d.message || "-"}</p>
+          </div>
         `;
+
+        card.addEventListener("click", ()=>{
+          const details = card.querySelector(".request-details");
+          details.style.display = details.style.display === "block" ? "none" : "block";
+        });
+
         container.appendChild(card);
       });
     });
