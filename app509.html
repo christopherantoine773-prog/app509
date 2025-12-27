@@ -336,8 +336,6 @@ footer{
 </div>
 
 <button type="submit">Envoyer</button>
-
-<!-- ===== BOUTON RETOUR PROFIL ===== -->
 <button type="button" id="profilBtn" onclick="goToProfil()">Retour vers Profil</button>
 
 </form>
@@ -345,37 +343,37 @@ footer{
 
 <footer>© 2025 — Ａｐｐｓ⁵⁰９</footer>
 
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-<script>
-// Firebase config
 const firebaseConfig = {
-  apiKey: "VOTRE_API_KEY",
-  authDomain: "VOTRE_PROJECT.firebaseapp.com",
-  projectId: "VOTRE_PROJECT",
-  storageBucket: "VOTRE_PROJECT.appspot.com",
-  messagingSenderId: "VOTRE_SENDER_ID",
-  appId: "VOTRE_APP_ID"
+  apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
+  authDomain: "app509cloud.firebaseapp.com",
+  projectId: "app509cloud",
+  storageBucket: "app509cloud.firebasestorage.app",
+  messagingSenderId: "445508086674",
+  appId: "1:445508086674:web:22d593d940bd328d436f4b"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const auth = firebase.auth();
 
-// Vérifie connexion utilisateur
-auth.onAuthStateChanged(user => {
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+
+// ===== Vérification connexion utilisateur =====
+onAuthStateChanged(auth, (user)=>{
   if(!user){
-    alert("❌ Veuillez vous connecter pour remplir le formulaire.");
-    window.location.href = "connexion.html";
+    alert("❌ Vous devez être connecté pour accéder au formulaire");
+    window.location.href = "profil.html";
+    return;
   }
+  currentUser = user;
+  document.getElementById("currentAccount").value = user.displayName || "";
+  document.querySelector('input[type="email"]').value = user.email || "";
 });
-
-/* Nom du compte auto (modifiable) */
-let currentUser = JSON.parse(sessionStorage.getItem("dpstore_user") || "{}");
-if(currentUser.username){
-  document.getElementById("currentAccount").value = currentUser.username;
-}
 
 /* Genre */
 function setGender(el){
@@ -389,22 +387,25 @@ function toggleCreator(){
   document.getElementById("creatorLinkBox").style.display =
     document.getElementById("isCreator").checked ? "block" : "none";
 }
-
-/* Affiche le bon état au chargement */
 document.addEventListener("DOMContentLoaded", ()=>{ toggleCreator(); });
 
-/* Réseau social avec icône */
+/* Réseau social */
 function setNetwork(el){
   document.querySelectorAll(".network-btn").forEach(b=>b.classList.remove("active"));
   el.classList.add("active");
   document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
 }
 
-/* Submit => envoie automatique Firestore */
-document.getElementById("apps509Form").addEventListener("submit",async e=>{
+/* Submit => Firestore */
+document.getElementById("apps509Form").addEventListener("submit", async e=>{
   e.preventDefault();
+  if(!currentUser){
+    alert("❌ Vous devez être connecté pour envoyer le formulaire");
+    return;
+  }
   const form = e.target;
   const data = {
+    uid: currentUser.uid,
     accountName: form.currentAccount.value,
     fullName: form.querySelector('input[type="text"]:not(#currentAccount)').value,
     gender: document.getElementById("gender").value,
@@ -416,11 +417,11 @@ document.getElementById("apps509Form").addEventListener("submit",async e=>{
     creatorNetwork: document.getElementById("creatorNetworkValue").value,
     creatorLink: form.querySelector('#creatorLinkBox input[type="url"]').value,
     message: form.querySelector('textarea').value,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    timestamp: serverTimestamp()
   };
   try{
-    await db.collection("forms").add(data);
-    alert("✅ Formulaire envoyé automatiquement dans Firestore !");
+    await addDoc(collection(db,"forms"), data);
+    alert("✅ Formulaire envoyé avec succès !");
     form.reset();
     toggleCreator();
   }catch(err){
