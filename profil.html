@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ａｐｐｓ⁵⁰９ | Profil</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#000,#2c2c2c);
+  color:#fff;
+}
+.container{
+  max-width:420px;
+  margin:40px auto;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:18px;
+  padding:22px;
+  text-align:center;
+}
+h2{
+  margin-top:0;
+  background:linear-gradient(90deg,#fff,#aaa);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+label{
+  display:block;
+  margin-top:12px;
+  font-size:0.85rem;
+  color:#ccc;
+  text-align:left;
+}
+input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.2);
+  background:rgba(0,0,0,0.5);
+  color:white;
+}
+button{
+  width:100%;
+  padding:12px;
+  margin-top:14px;
+  border:none;
+  border-radius:12px;
+  background:#00aaff;
+  color:black;
+  font-weight:600;
+  cursor:pointer;
+}
+button:hover{
+  background:#FFD700;
+}
+.small{
+  font-size:0.8rem;
+  color:#aaa;
+  margin-top:6px;
+}
+.admin-box{
+  margin-top:20px;
+  padding:14px;
+  border-radius:12px;
+  background:rgba(255,0,0,0.08);
+  border:1px solid rgba(255,0,0,0.3);
+}
+.role{
+  margin-top:10px;
+  font-weight:bold;
+  color:#00aaff;
+}
+.logout{
+  background:red;
+  color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Profil utilisateur</h2>
+
+  <p><strong>Email :</strong></p>
+  <p id="email">—</p>
+
+  <label>Nom complet</label>
+  <input type="text" id="fullname" placeholder="Votre nom">
+
+  <button id="saveProfile">💾 Enregistrer le profil</button>
+
+  <div class="role">
+    Rôle : <span id="role">user</span>
+  </div>
+
+  <!-- ===== ADMIN CODE ===== -->
+  <div class="admin-box">
+    <label>Code administrateur</label>
+    <input type="text" id="adminCode" placeholder="Code secret admin">
+    <button id="becomeAdmin">🔐 Devenir admin</button>
+    <div class="small">Accès réservé</div>
+  </div>
+
+  <button onclick="location.href='Ａｐｐｓ⁵⁰９.html'">➡️ Aller vers Ａｐｐｓ⁵⁰９</button>
+  <button class="logout" id="logout">Déconnexion</button>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAm1-53K6VuK7wdwu67pUjLU3t7S_-bwJo",
+  authDomain: "app509-d7bc6.firebaseapp.com",
+  projectId: "app509-d7bc6",
+  storageBucket: "app509-d7bc6.firebasestorage.app",
+  messagingSenderId: "1139351082",
+  appId: "1:1139351082:web:18461a1249b189ef7eed53"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const emailEl = document.getElementById("email");
+const fullnameEl = document.getElementById("fullname");
+const roleEl = document.getElementById("role");
+
+let currentUser = null;
+
+// ===== Vérifier connexion =====
+onAuthStateChanged(auth, async (user)=>{
+  if(!user){
+    location.href = "index.html";
+    return;
+  }
+
+  currentUser = user;
+  emailEl.textContent = user.email;
+
+  const userRef = doc(db,"users",user.uid);
+  const snap = await getDoc(userRef);
+
+  if(!snap.exists()){
+    await setDoc(userRef,{
+      email: user.email,
+      fullname: "",
+      role: "user",
+      createdAt: new Date()
+    });
+  }
+
+  const data = (await getDoc(userRef)).data();
+  fullnameEl.value = data.fullname || "";
+  roleEl.textContent = data.role || "user";
+});
+
+// ===== Sauvegarder profil =====
+document.getElementById("saveProfile").onclick = async ()=>{
+  if(!currentUser) return;
+  await updateDoc(doc(db,"users",currentUser.uid),{
+    fullname: fullnameEl.value
+  });
+  alert("✅ Profil enregistré");
+};
+
+// ===== Devenir admin =====
+document.getElementById("becomeAdmin").onclick = async ()=>{
+  const code = document.getElementById("adminCode").value.trim();
+  if(code !== "098326623890"){
+    alert("❌ Code admin incorrect");
+    return;
+  }
+  await updateDoc(doc(db,"users",currentUser.uid),{
+    role:"admin"
+  });
+  roleEl.textContent = "admin";
+  alert("✅ Vous êtes maintenant admin");
+};
+
+// ===== Déconnexion =====
+document.getElementById("logout").onclick = async ()=>{
+  await signOut(auth);
+  location.href = "index.html";
+};
+</script>
+
+</body>
+</html>
