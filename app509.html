@@ -6,7 +6,7 @@
 <title>Ａｐｐｓ⁵⁰９ | Formulaire</title>
 
 <style>
-/* ... ton CSS existant ... */
+/* ton CSS existant */
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
@@ -63,13 +63,13 @@ body{
 
   <label>Téléphone</label>
   <div class="phone-box">
-    <select>
+    <select id="phonePrefix">
       <option value="+509">🇭🇹 +509</option>
       <option value="+1">🇺🇸 +1</option>
       <option value="+33">🇫🇷 +33</option>
       <option value="+44">🇬🇧 +44</option>
     </select>
-    <input type="tel" placeholder="Numéro">
+    <input type="tel" id="phoneNumber" placeholder="Numéro">
   </div>
 </div>
 
@@ -78,7 +78,7 @@ body{
   <div class="form-title">Jeu</div>
 
   <label>UID du joueur</label>
-  <input type="text" placeholder="UID / ID du joueur">
+  <input type="text" id="playerUID" placeholder="UID / ID du joueur">
 
   <label>Région</label>
   <select id="playerRegion">
@@ -129,7 +129,7 @@ body{
     <input type="hidden" id="creatorNetworkValue" value="tiktok">
 
     <label>Lien du profil</label>
-    <input type="url" placeholder="https://">
+    <input type="url" id="creatorLink" placeholder="https://">
   </div>
 </div>
 
@@ -137,7 +137,7 @@ body{
 <div class="form-section">
   <div class="form-title">Message</div>
 
-  <textarea rows="4" placeholder="Informations supplémentaires"></textarea>
+  <textarea rows="4" id="messageInput" placeholder="Informations supplémentaires"></textarea>
 </div>
 
 <button type="submit">Envoyer</button>
@@ -150,7 +150,9 @@ body{
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+/* 🔥 Firebase config */
 const firebaseConfig = {
   apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
   authDomain: "app509cloud.firebaseapp.com",
@@ -162,20 +164,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-// ===== Vérifier si l'utilisateur est connecté =====
+/* Vérifier connexion */
 onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    // Redirection si non connecté
+  if(!user){
     location.href = "index.html";
   } else {
-    // Préremplir formulaire avec nom et email
-    const fullnameInput = document.getElementById("fullnameInput");
-    const emailInput = document.getElementById("emailInput");
-    fullnameInput.value = user.displayName || "";
-    emailInput.value = user.email || "";
+    // Préremplir
+    document.getElementById("fullnameInput").value = user.displayName || "";
+    document.getElementById("emailInput").value = user.email || "";
 
-    // Sauvegarder session
     sessionStorage.setItem("dpstore_user", JSON.stringify({
       fullname: user.displayName || "",
       email: user.email,
@@ -184,7 +183,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-/* Nom du compte auto (modifiable) */
+/* Nom du compte auto */
 let currentUser = JSON.parse(sessionStorage.getItem("dpstore_user") || "{}");
 if(currentUser.username){
   document.getElementById("currentAccount").value = currentUser.username;
@@ -210,11 +209,34 @@ function setNetwork(el){
   document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
 }
 
-/* Submit */
-document.getElementById("apps509Form").addEventListener("submit",e=>{
+/* ===== Soumettre formulaire dans Firestore ===== */
+document.getElementById("apps509Form").addEventListener("submit", async e=>{
   e.preventDefault();
-  alert("✅ Formulaire envoyé avec succès !");
-  e.target.reset();
+
+  const formData = {
+    currentAccount: document.getElementById("currentAccount").value,
+    fullname: document.getElementById("fullnameInput").value,
+    gender: document.getElementById("gender").value,
+    email: document.getElementById("emailInput").value,
+    phone: document.getElementById("phonePrefix").value + " " + document.getElementById("phoneNumber").value,
+    playerUID: document.getElementById("playerUID").value,
+    playerRegion: document.getElementById("playerRegion").value,
+    playerLevel: document.getElementById("playerLevel").value,
+    isCreator: document.getElementById("isCreator").checked,
+    creatorNetwork: document.getElementById("creatorNetworkValue").value,
+    creatorLink: document.getElementById("creatorLink").value,
+    message: document.getElementById("messageInput").value,
+    createdAt: serverTimestamp()
+  };
+
+  try{
+    await addDoc(collection(db,"forms"), formData);
+    alert("✅ Formulaire envoyé avec succès !");
+    e.target.reset();
+    toggleCreator(); // cacher les champs créateur si nécessaire
+  } catch(err){
+    alert("❌ Erreur lors de l'envoi : " + err.message);
+  }
 });
 </script>
 
