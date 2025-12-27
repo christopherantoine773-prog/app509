@@ -226,7 +226,7 @@ footer{
   <input type="text" required placeholder="Nom et prénom">
   <label>Genre</label>
   <div class="gender-box">
-    <div class="gender-btn active" data-gender="♂" onclick="setGender(this)">♂</div>
+    <div class="gender-btn" data-gender="♂" onclick="setGender(this)">♂</div>
     <div class="gender-btn" data-gender="♀" onclick="setGender(this)">♀</div>
   </div>
   <input type="hidden" id="gender" value="♂">
@@ -329,11 +329,11 @@ footer{
 
 <footer>© 2025 — Ａｐｐｓ⁵⁰９</footer>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyAufnNEFHPZLbMK-gwYotj4VB1bqBXw8l4",
   authDomain: "app509cloud.firebaseapp.com",
@@ -342,25 +342,24 @@ const firebaseConfig = {
   messagingSenderId: "445508086674",
   appId: "1:445508086674:web:22d593d940bd328d436f4b"
 };
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
 
 let currentUser = null;
 
-onAuthStateChanged(auth, async user => {
+auth.onAuthStateChanged(async user => {
   if(!user){
+    alert("❌ Veuillez vous connecter pour remplir le formulaire.");
     window.location.href = "index.html";
     return;
   }
   currentUser = user;
   document.getElementById("profilePhoto").src = user.photoURL || "https://via.placeholder.com/100";
 
-  const docRef = doc(db, "users", user.uid);
-  const docSnap = await getDoc(docRef);
-
-  if(docSnap.exists()){
+  const docRef = db.collection("users").doc(user.uid);
+  const docSnap = await docRef.get();
+  if(docSnap.exists){
     const data = docSnap.data();
     document.getElementById("currentAccount").value = data.username || data.fullname || "";
     document.querySelector('input[type="text"]:not(#currentAccount)').value = data.fullname || "";
@@ -412,10 +411,10 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
     creatorLink: form.querySelector('#creatorLinkBox input[type="url"]').value,
     message: form.querySelector('textarea').value,
     profilePhoto: document.getElementById("profilePhoto").src,
-    timestamp: serverTimestamp()
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
   };
   try{
-    await addDoc(collection(db, "forms"), data);
+    await db.collection("forms").add(data);
     alert("✅ Formulaire envoyé automatiquement dans Firestore !");
     form.reset();
     toggleCreator();
