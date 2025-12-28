@@ -203,12 +203,13 @@ onAuthStateChanged(auth, async (user) => {
       grouped[email].forEach(form=>{
         const formCard = document.createElement("div");
         formCard.className = "form-card";
+
         const phoneLink = form.phone ? `<a href="https://wa.me/${form.phone.replace(/\D/g,'')}" target="_blank">${form.phone}</a>` : "-";
         const networkLink = form.creatorLink ? `<a href="${form.creatorLink}" target="_blank">${form.creatorNetwork}</a>` : "-";
+        const uidDisplay = form.playerUID ? `<span style="color:#00aaff; font-weight:bold;">${form.playerUID}</span>` : "-";
 
         formCard.innerHTML = `
-          <p><strong>ID du joueur:</strong> ${form.playerUID || "-"}</p>
-          <p><strong>UID Firebase:</strong> ${form.userId || "-"}</p>
+          <p><strong>UID du joueur:</strong> ${uidDisplay}</p>
           <p><strong>Compte:</strong> ${form.accountName || "-"}</p>
           <p><strong>Nom complet:</strong> ${form.fullName || "-"}</p>
           <p><strong>Genre:</strong> ${form.gender || "-"}</p>
@@ -219,7 +220,7 @@ onAuthStateChanged(auth, async (user) => {
           <p><strong>Lien profil:</strong> ${networkLink}</p>
           <p><strong>Téléphone:</strong> ${phoneLink}</p>
           <p><strong>Message:</strong> ${form.message || "-"}</p>
-          <p><strong>Soumis le:</strong> ${form.createdAt?.toDate?.()?.toLocaleString() || "-"}</p>
+          <p><strong>Soumis le:</strong> ${form.createdAt ? (form.createdAt.toDate ? form.createdAt.toDate().toLocaleString() : new Date(form.createdAt).toLocaleString()) : "-"}</p>
           <div class="status-buttons">
             <button class="status-pending" data-id="${form.id}">En attente</button>
             <button class="status-accepted" data-id="${form.id}">Accepté</button>
