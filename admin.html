@@ -218,7 +218,7 @@ onAuthStateChanged(auth, async (user) => {
           <p><strong>Lien profil:</strong> ${networkLink}</p>
           <p><strong>Téléphone:</strong> ${phoneLink}</p>
           <p><strong>Message:</strong> ${form.message || "-"}</p>
-          <p><strong>Soumis le:</strong> ${form.createdAt?.toDate?.()?.toLocaleString() || "-"}</p>
+          <p><strong>Soumis le:</strong> ${form.createdAt ? (form.createdAt.toDate ? form.createdAt.toDate().toLocaleString() : new Date(form.createdAt).toLocaleString()) : "-"}</p>
           <div class="status-buttons">
             <button class="status-pending" data-id="${form.id}">En attente</button>
             <button class="status-accepted" data-id="${form.id}">Accepté</button>
