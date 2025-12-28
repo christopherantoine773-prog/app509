@@ -208,6 +208,7 @@ onAuthStateChanged(auth, async (user) => {
 
         formCard.innerHTML = `
           <p><strong>UID:</strong> ${form.uid || "-"}</p>
+          <p><strong>ID Form:</strong> ${form.id}</p>
           <p><strong>Compte:</strong> ${form.accountName || "-"}</p>
           <p><strong>Nom complet:</strong> ${form.fullName || "-"}</p>
           <p><strong>Genre:</strong> ${form.gender || "-"}</p>
