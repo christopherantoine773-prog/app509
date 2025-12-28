@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Ａｐｐｓ50９</title>
+<title>Admin — Ａｐｐｓ⁵⁰９</title>
 <style>
 body{
   margin:0;
@@ -120,7 +120,7 @@ a:hover{
 <body>
 
 <header>
-  <h1>Admin Panel — Ａｐｐｓ⁵０９</h1>
+  <h1>Admin Panel — Ａｐｐｓ⁵⁰９</h1>
 </header>
 
 <div class="container" id="usersContainer">
@@ -203,13 +203,11 @@ onAuthStateChanged(auth, async (user) => {
       grouped[email].forEach(form=>{
         const formCard = document.createElement("div");
         formCard.className = "form-card";
-
         const phoneLink = form.phone ? `<a href="https://wa.me/${form.phone.replace(/\D/g,'')}" target="_blank">${form.phone}</a>` : "-";
         const networkLink = form.creatorLink ? `<a href="${form.creatorLink}" target="_blank">${form.creatorNetwork}</a>` : "-";
-        const uidDisplay = form.uid ? `<span style="color:#00aaff; font-weight:bold;">${form.uid}</span>` : "-";
 
         formCard.innerHTML = `
-          <p><strong>UID du joueur:</strong> ${uidDisplay}</p>
+          <p><strong>UID du joueur:</strong> ${form.userId || "-"}</p>
           <p><strong>Compte:</strong> ${form.accountName || "-"}</p>
           <p><strong>Nom complet:</strong> ${form.fullName || "-"}</p>
           <p><strong>Genre:</strong> ${form.gender || "-"}</p>
@@ -220,7 +218,7 @@ onAuthStateChanged(auth, async (user) => {
           <p><strong>Lien profil:</strong> ${networkLink}</p>
           <p><strong>Téléphone:</strong> ${phoneLink}</p>
           <p><strong>Message:</strong> ${form.message || "-"}</p>
-          <p><strong>Soumis le:</strong> ${form.createdAt ? (form.createdAt.toDate ? form.createdAt.toDate().toLocaleString() : new Date(form.createdAt).toLocaleString()) : "-"}</p>
+          <p><strong>Soumis le:</strong> ${form.createdAt?.toDate?.()?.toLocaleString() || "-"}</p>
           <div class="status-buttons">
             <button class="status-pending" data-id="${form.id}">En attente</button>
             <button class="status-accepted" data-id="${form.id}">Accepté</button>
