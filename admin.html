@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Ａｐｐｓ50９</title>
+<title>Admin — Ａｐｐｓ⁵⁰９</title>
 <style>
 body{
   margin:0;
@@ -120,7 +120,7 @@ a:hover{
 <body>
 
 <header>
-  <h1>Admin Panel — Ａｐｐｓ50９</h1>
+  <h1>Admin Panel — Ａｐｐｓ⁵⁰９</h1>
 </header>
 
 <div class="container" id="usersContainer">
@@ -158,8 +158,9 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   const userDocRef = doc(db,"users",user.uid);
-  const userDoc = await userDocRef.get?.() || { data: ()=>({ role:"admin" }) };
-  const userData = userDoc.data?.() || {};
+  const userDocSnap = await userDocRef.get();
+  const userData = userDocSnap.data() || { role: "admin" };
+
   if(userData.role !== "admin"){
     alert("❌ Accès refusé !");
     location.href = "profil.html";
@@ -207,7 +208,8 @@ onAuthStateChanged(auth, async (user) => {
         const networkLink = form.creatorLink ? `<a href="${form.creatorLink}" target="_blank">${form.creatorNetwork}</a>` : "-";
 
         formCard.innerHTML = `
-          <p><strong>UID du joueur:</strong> ${form.userId || "-"}</p>
+          <p><strong>ID du joueur:</strong> ${form.playerUID || "-"}</p>
+          <p><strong>UID Firebase:</strong> ${form.userId || "-"}</p>
           <p><strong>Compte:</strong> ${form.accountName || "-"}</p>
           <p><strong>Nom complet:</strong> ${form.fullName || "-"}</p>
           <p><strong>Genre:</strong> ${form.gender || "-"}</p>
