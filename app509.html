@@ -414,7 +414,15 @@ footer{
       </div>
     </div>
     <input type="hidden" id="creatorNetworkValue" value="tiktok">
-    <label>Lien du profil</label>
+
+    <!-- Liens multiples -->
+    <label>Lien du profil 1</label>
+    <input type="url" placeholder="https://">
+    <label>Lien du profil 2</label>
+    <input type="url" placeholder="https://">
+    <label>Lien du profil 3</label>
+    <input type="url" placeholder="https://">
+    <label>Lien du profil 4</label>
     <input type="url" placeholder="https://">
   </div>
 </div>
@@ -520,13 +528,16 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
     fullName: form.querySelector('input[type="text"]:not(#currentAccount)').value,
     gender: document.getElementById("gender").value,
     email: form.querySelector('input[type="email"]').value,
-    phone: fullPhone, // <-- ici la mise à jour
+    phone: fullPhone,
     region: document.getElementById("playerRegion").value,
     level: form.playerLevel.value,
     playerUID: form.playerUID.value,
     isCreator: document.getElementById("isCreator").checked,
     creatorNetwork: document.getElementById("creatorNetworkValue").value,
-    creatorLink: form.querySelector('#creatorLinkBox input[type="url"]').value,
+    creatorLink1: form.querySelector('#creatorLinkBox input:nth-of-type(2)').value,
+    creatorLink2: form.querySelector('#creatorLinkBox input:nth-of-type(3)').value,
+    creatorLink3: form.querySelector('#creatorLinkBox input:nth-of-type(4)').value,
+    creatorLink4: form.querySelector('#creatorLinkBox input:nth-of-type(5)').value,
     message: form.querySelector('textarea').value,
     profilePhoto: document.getElementById("profilePhoto").src,
     status: "En attente",
