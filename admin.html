@@ -120,7 +120,7 @@ a:hover{
 <body>
 
 <header>
-  <h1>Admin Panel — Ａｐｐｓ50９</h1>
+  <h1>Admin Panel — Ａｐｐｓ⁵０９</h1>
 </header>
 
 <div class="container" id="usersContainer">
@@ -203,11 +203,13 @@ onAuthStateChanged(auth, async (user) => {
       grouped[email].forEach(form=>{
         const formCard = document.createElement("div");
         formCard.className = "form-card";
+
         const phoneLink = form.phone ? `<a href="https://wa.me/${form.phone.replace(/\D/g,'')}" target="_blank">${form.phone}</a>` : "-";
         const networkLink = form.creatorLink ? `<a href="${form.creatorLink}" target="_blank">${form.creatorNetwork}</a>` : "-";
+        const uidDisplay = form.uid ? `<span style="color:#00aaff; font-weight:bold;">${form.uid}</span>` : "-";
 
         formCard.innerHTML = `
-          <p><strong>UID du joueur:</strong> ${form.uid || "-"}</p>
+          <p><strong>UID du joueur:</strong> ${uidDisplay}</p>
           <p><strong>Compte:</strong> ${form.accountName || "-"}</p>
           <p><strong>Nom complet:</strong> ${form.fullName || "-"}</p>
           <p><strong>Genre:</strong> ${form.gender || "-"}</p>
