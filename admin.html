@@ -204,10 +204,17 @@ onAuthStateChanged(auth, async (user) => {
         const formCard = document.createElement("div");
         formCard.className = "form-card";
 
-        // Bloc mis à jour pour inclure le code pays dans le numéro
+        // Bloc mis à jour pour inclure tous les liens du créateur
         const phoneWithCode = form.countryCode && form.phone ? `${form.countryCode}${form.phone.replace(/\D/g,'')}` : form.phone || "-";
         const phoneLink = phoneWithCode !== "-" ? `<a href="https://wa.me/${phoneWithCode}" target="_blank">${phoneWithCode}</a>` : "-";
-        const networkLink = form.creatorLink ? `<a href="${form.creatorLink}" target="_blank">${form.creatorNetwork}</a>` : "-";
+
+        const networkLinks = [];
+        if(form.creatorLink1) networkLinks.push(`<a href="${form.creatorLink1}" target="_blank">${form.creatorNetwork || "Profil 1"}</a>`);
+        if(form.creatorLink2) networkLinks.push(`<a href="${form.creatorLink2}" target="_blank">${form.creatorNetwork || "Profil 2"}</a>`);
+        if(form.creatorLink3) networkLinks.push(`<a href="${form.creatorLink3}" target="_blank">${form.creatorNetwork || "Profil 3"}</a>`);
+        if(form.creatorLink4) networkLinks.push(`<a href="${form.creatorLink4}" target="_blank">${form.creatorNetwork || "Profil 4"}</a>`);
+        const networkLink = networkLinks.length ? networkLinks.join(" | ") : "-";
+
         const uidDisplay = form.playerUID ? `<span style="color:#00aaff; font-weight:bold;">${form.playerUID}</span>` : "-";
 
         formCard.innerHTML = `
@@ -219,7 +226,7 @@ onAuthStateChanged(auth, async (user) => {
           <p><strong>Niveau:</strong> ${form.level || "-"}</p>
           <p><strong>Créateur:</strong> ${form.isCreator ? "Oui" : "Non"}</p>
           <p><strong>Réseau:</strong> ${form.creatorNetwork || "-"}</p>
-          <p><strong>Lien profil:</strong> ${networkLink}</p>
+          <p><strong>Liens profils:</strong> ${networkLink}</p>
           <p><strong>Téléphone:</strong> ${phoneLink}</p>
           <p><strong>Message:</strong> ${form.message || "-"}</p>
           <p><strong>Soumis le:</strong> ${form.createdAt ? (form.createdAt.toDate ? form.createdAt.toDate().toLocaleString() : new Date(form.createdAt).toLocaleString()) : "-"}</p>
