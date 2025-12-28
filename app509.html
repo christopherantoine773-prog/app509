@@ -401,7 +401,7 @@ footer{
         <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png" width="20"> Facebook
       </div>
       <div class="network-btn" data-network="twitter" onclick="setNetwork(this)">
-        <img src="https://upload.wikimedia.org/wikipedia/fr/c/c8/Twitter_Bird.svg" width="20"> Twitter
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" width="20"> Twitter
       </div>
       <div class="network-btn" data-network="snapchat" onclick="setNetwork(this)">
         <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/snapchat.svg" width="20"> Snapchat
@@ -501,15 +501,18 @@ function setNetwork(el){
   document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
 }
 
+// ---------------- Mise à jour de la récupération du téléphone ----------------
 document.getElementById("apps509Form").addEventListener("submit", async e=>{
   e.preventDefault();
   if(!currentUser) return;
   const form = e.target;
 
-  // Récupérer le code pays et le numéro
-  const countryCode = form.querySelector('.phone-box select').value || "";
-  const phoneNumber = form.querySelector('.phone-box input').value.replace(/\D/g,'');
-  const fullPhone = phoneNumber ? `${countryCode}${phoneNumber}` : "";
+  // Récupérer le code pays et le numéro correctement
+  const phoneSelect = form.querySelector('.phone-box select');
+  const phoneInput = form.querySelector('.phone-box input');
+  const countryCode = phoneSelect ? phoneSelect.value : "";
+  const number = phoneInput ? phoneInput.value.replace(/\D/g,'') : "";
+  const fullPhone = countryCode + number;
 
   const data = {
     userId: currentUser.uid,
@@ -517,7 +520,7 @@ document.getElementById("apps509Form").addEventListener("submit", async e=>{
     fullName: form.querySelector('input[type="text"]:not(#currentAccount)').value,
     gender: document.getElementById("gender").value,
     email: form.querySelector('input[type="email"]').value,
-    phone: fullPhone,
+    phone: fullPhone, // <-- ici la mise à jour
     region: document.getElementById("playerRegion").value,
     level: form.playerLevel.value,
     playerUID: form.playerUID.value,
