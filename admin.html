@@ -204,7 +204,9 @@ onAuthStateChanged(auth, async (user) => {
         const formCard = document.createElement("div");
         formCard.className = "form-card";
 
-        const phoneLink = form.phone ? `<a href="https://wa.me/${form.phone.replace(/\D/g,'')}" target="_blank">${form.phone}</a>` : "-";
+        // Bloc mis à jour pour inclure le code pays dans le numéro
+        const phoneWithCode = form.countryCode && form.phone ? `${form.countryCode}${form.phone.replace(/\D/g,'')}` : form.phone || "-";
+        const phoneLink = phoneWithCode !== "-" ? `<a href="https://wa.me/${phoneWithCode}" target="_blank">${phoneWithCode}</a>` : "-";
         const networkLink = form.creatorLink ? `<a href="${form.creatorLink}" target="_blank">${form.creatorNetwork}</a>` : "-";
         const uidDisplay = form.playerUID ? `<span style="color:#00aaff; font-weight:bold;">${form.playerUID}</span>` : "-";
 
