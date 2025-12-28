@@ -415,7 +415,7 @@ footer{
     </div>
     <input type="hidden" id="creatorNetworkValue" value="tiktok">
 
-    <!-- Liens multiples -->
+    <!-- Ajout complet des liens pour Firestore -->
     <label>Lien du profil 1</label>
     <input type="url" placeholder="https://">
     <label>Lien du profil 2</label>
@@ -509,13 +509,12 @@ function setNetwork(el){
   document.getElementById("creatorNetworkValue").value = el.getAttribute("data-network");
 }
 
-// ---------------- Mise à jour de la récupération du téléphone ----------------
+// ---------------- Mise à jour de la récupération du téléphone et liens ----------------
 document.getElementById("apps509Form").addEventListener("submit", async e=>{
   e.preventDefault();
   if(!currentUser) return;
   const form = e.target;
 
-  // Récupérer le code pays et le numéro correctement
   const phoneSelect = form.querySelector('.phone-box select');
   const phoneInput = form.querySelector('.phone-box input');
   const countryCode = phoneSelect ? phoneSelect.value : "";
