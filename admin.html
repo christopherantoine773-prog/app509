@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin — Ａｐｐｓ⁵⁰９</title>
+<title>Admin — Ａｐｐｓ50９</title>
 <style>
 body{
   margin:0;
@@ -120,7 +120,7 @@ a:hover{
 <body>
 
 <header>
-  <h1>Admin Panel — Ａｐｐｓ⁵⁰９</h1>
+  <h1>Admin Panel — Ａｐｐｓ50９</h1>
 </header>
 
 <div class="container" id="usersContainer">
@@ -158,9 +158,8 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   const userDocRef = doc(db,"users",user.uid);
-  const userDocSnap = await userDocRef.get();
-  const userData = userDocSnap.data() || { role: "admin" };
-
+  const userDoc = await userDocRef.get?.() || { data: ()=>({ role:"admin" }) };
+  const userData = userDoc.data?.() || {};
   if(userData.role !== "admin"){
     alert("❌ Accès refusé !");
     location.href = "profil.html";
