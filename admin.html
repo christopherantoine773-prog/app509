@@ -120,7 +120,7 @@ a:hover{
 <body>
 
 <header>
-  <h1>Admin Panel — Ａｐｐｓ⁵⁰９</h1>
+  <h1>Admin Panel — Ａｐｐｓ50９</h1>
 </header>
 
 <div class="container" id="usersContainer">
@@ -207,8 +207,7 @@ onAuthStateChanged(auth, async (user) => {
         const networkLink = form.creatorLink ? `<a href="${form.creatorLink}" target="_blank">${form.creatorNetwork}</a>` : "-";
 
         formCard.innerHTML = `
-          <p><strong>UID:</strong> ${form.uid || "-"}</p>
-          <p><strong>ID Form:</strong> ${form.id}</p>
+          <p><strong>UID du joueur:</strong> ${form.uid || "-"}</p>
           <p><strong>Compte:</strong> ${form.accountName || "-"}</p>
           <p><strong>Nom complet:</strong> ${form.fullName || "-"}</p>
           <p><strong>Genre:</strong> ${form.gender || "-"}</p>
