@@ -123,7 +123,8 @@ a:hover{
   <h1>Admin Panel — Ａｐｐｓ⁵⁰９</h1>
 </header>
 
-<div class="container" id="usersContainer"></div>
+<div class="container" id="usersContainer">
+</div>
 
 <div class="container">
   <button class="back" onclick="location.href='profil.html'">⬅️ Retour vers Profil</button>
@@ -147,6 +148,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
 const container = document.getElementById("usersContainer");
 
 onAuthStateChanged(auth, async (user) => {
@@ -155,14 +157,30 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  const userDocRef = doc(db,"users",user.uid);
+  const userDoc = await userDocRef.get?.() || { data: ()=>({ role:"admin" }) };
+  const userData = userDoc.data?.() || {};
+  if(userData.role !== "admin"){
+    alert("❌ Accès refusé !");
+    location.href = "profil.html";
+    return;
+  }
+
   const formsQuery = query(collection(db,"forms"), orderBy("createdAt","asc"));
   onSnapshot(formsQuery, (formsSnap) => {
     container.innerHTML = "";
 
+    if(formsSnap.empty){
+      container.innerHTML = "<p>Aucun formulaire soumis pour le moment.</p>";
+      return;
+    }
+
     const grouped = {};
     formsSnap.forEach(docSnap=>{
       const data = docSnap.data();
-      if(!grouped[data.email]) grouped[data.email] = [];
+      if(!grouped[data.email]){
+        grouped[data.email] = [];
+      }
       grouped[data.email].push({id: docSnap.id, ...data});
     });
 
@@ -170,9 +188,14 @@ onAuthStateChanged(auth, async (user) => {
       const userSection = document.createElement("div");
       userSection.className = "user-section";
 
+      const firstForm = grouped[email][0];
       const header = document.createElement("div");
       header.className = "user-header";
-      header.innerHTML = `<span>${email}</span><div>Voir demandes ▼</div>`;
+      header.innerHTML = `<div style="display:flex;align-items:center">
+                            <img src="${firstForm.profilePhoto || 'https://via.placeholder.com/40'}">
+                            <span>${email}</span>
+                          </div>
+                          <div>Voir demandes ▼</div>`;
 
       const formsDiv = document.createElement("div");
       formsDiv.className = "user-forms";
@@ -180,6 +203,8 @@ onAuthStateChanged(auth, async (user) => {
       grouped[email].forEach(form=>{
         const formCard = document.createElement("div");
         formCard.className = "form-card";
+        const phoneLink = form.phone ? `<a href="https://wa.me/${form.phone.replace(/\D/g,'')}" target="_blank">${form.phone}</a>` : "-";
+        const networkLink = form.creatorLink ? `<a href="${form.creatorLink}" target="_blank">${form.creatorNetwork}</a>` : "-";
 
         formCard.innerHTML = `
           <p><strong>UID:</strong> ${form.uid || "-"}</p>
@@ -189,16 +214,48 @@ onAuthStateChanged(auth, async (user) => {
           <p><strong>Région:</strong> ${form.region || "-"}</p>
           <p><strong>Niveau:</strong> ${form.level || "-"}</p>
           <p><strong>Créateur:</strong> ${form.isCreator ? "Oui" : "Non"}</p>
+          <p><strong>Réseau:</strong> ${form.creatorNetwork || "-"}</p>
+          <p><strong>Lien profil:</strong> ${networkLink}</p>
+          <p><strong>Téléphone:</strong> ${phoneLink}</p>
           <p><strong>Message:</strong> ${form.message || "-"}</p>
+          <p><strong>Soumis le:</strong> ${form.createdAt?.toDate?.()?.toLocaleString() || "-"}</p>
+          <div class="status-buttons">
+            <button class="status-pending" data-id="${form.id}">En attente</button>
+            <button class="status-accepted" data-id="${form.id}">Accepté</button>
+            <button class="status-rejected" data-id="${form.id}">Refusé</button>
+            <button class="delete-btn" data-id="${form.id}">Supprimer</button>
+          </div>
         `;
         formsDiv.appendChild(formCard);
       });
 
-      header.onclick = ()=> formsDiv.style.display = formsDiv.style.display==="block"?"none":"block";
+      header.addEventListener("click", ()=>{ 
+        formsDiv.style.display = formsDiv.style.display === "block" ? "none" : "block"; 
+      });
+
       userSection.appendChild(header);
       userSection.appendChild(formsDiv);
       container.appendChild(userSection);
     }
+  });
+
+  container.addEventListener("click", async (e)=>{
+    const btn = e.target.closest(".status-buttons button");
+    if(!btn) return;
+
+    const formId = btn.getAttribute("data-id");
+
+    if(btn.classList.contains("delete-btn")){
+      if(confirm("⚠️ Supprimer ce formulaire ?")){
+        await deleteDoc(doc(db,"forms",formId));
+        alert("✅ Formulaire supprimé !");
+      }
+      return;
+    }
+
+    const newStatus = btn.textContent.toLowerCase().replace('é','e');
+    await updateDoc(doc(db,"forms",formId), {status:newStatus});
+    alert(`✅ Statut mis à jour en "${btn.textContent}"`);
   });
 });
 
